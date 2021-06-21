@@ -1,4 +1,4 @@
-package com.hannahj.noticeBoard.domain;
+package com.hannahj.bbs.domain;
 
 public class Board {
 	private int boardIdx;

@@ -1,4 +1,4 @@
-package com.hannahj.noticeBoard.domain;
+package com.hannahj.bbs.domain;
 
 import java.sql.Date;
 import java.util.List;
@@ -56,50 +56,79 @@ public class Post {
 	public Date getDateTime() {
 		return dateTime;
 	}
-	public int getParentIdx() {
+	public Integer getParentIdx() {
 		return parentIdx;
 	}
 	public void setParentIdx(int parentIdx) {
 		this.parentIdx = parentIdx;
 	}	
 
-	@Override
-	public String toString() {
-		return "Post [idx=" + idx + ", userName=" + userName + ", pw=" + pw + ", title=" + title + ", dateTime="
-				+ dateTime + ", content=" + content + ", parent=" + parentIdx + ", comment=" + comment + ", boards="
-				+ boardIdx + "]";
-	}
 
-//	public Post(String user_name, String pw, String title, String content) {
+
+@Override
+	public String toString() {
+		return "Post [boardIdx=" + boardIdx + ", idx=" + idx + ", userName=" + userName + ", pw=" + pw + ", title="
+				+ title + ", dateTime=" + dateTime + ", content=" + content + ", parentIdx=" + parentIdx + ", comment="
+				+ comment + "]";
+	}
+	//	public Post(String user_name, String pw, String title, String content) {
 //		this.userName = user_name;
 //		this.pw = pw;
 //		this.title = title;
 //		this.content = content;
 //	}
-	// 일반적인 게시글 작성 시작
-	public Post(int boardIdx, int idx, String userName, String pw, String title, Date dateTime,  
+	// 게시글 작성 시작
+	public Post(int boardIdx, String userName, String title,  String content) {
+		super();
+		this.boardIdx = boardIdx;
+		
+		this.userName = userName;
+		this.pw = null;
+		this.title = title;
+		this.dateTime = null;
+		this.content = content;
+		
+		this.comment = null;
+	}
+	public Post(int boardIdx, int idx, String userName, String title,  String content) {
+		super();
+		this.boardIdx = boardIdx;
+		this.idx = idx;
+		this.userName = userName;
+		this.title = title;
+		this.content = content;
+	}
+	// 게시글 받아오기
+	public Post(int boardIdx, int idx, String userName, String title, Date dateTime,  
 			String content) {
 		super();
 		this.boardIdx = boardIdx;
 		this.idx = idx;
 		this.userName = userName;
-		this.pw = pw;
+		this.pw = null;
 		this.title = title;
 		this.dateTime = dateTime;
 		this.content = content;
-		this.parentIdx = 0;
+		
 		this.comment = null;
 	}
-	// 댓글
-	public Post(int boardIdx, int idx, String userName, String pw, String title, Date dateTime,  
+	// 댓글 받아오기
+	public Post(int boardIdx, int idx, String userName, String title, Date dateTime,  
 			String content, int parentIdx) {
-		this(boardIdx, idx, userName, pw, title, dateTime, content);
+		this(boardIdx, idx, userName, title, dateTime, content);
 		this.parentIdx = parentIdx;
 	}
 	
-	public Post(int boardIdx, int idx, String userName, String pw, String title, Date dateTime, String content, int parentIdx,
+	// 댓글 작성
+	public Post(int boardIdx, String userName, String title,  
+			String content, int parentIdx) {
+		this(boardIdx, userName, title, content);
+		this.parentIdx = parentIdx;
+	}
+	
+	public Post(int boardIdx, int idx, String userName, String title, Date dateTime, String content, int parentIdx,
 			List<Post> comment) {
-		this(boardIdx, idx, userName, pw, title, dateTime, content, parentIdx);
+		this(boardIdx, idx, userName, title, dateTime, content, parentIdx);
 		this.comment = comment;
 	}
 	public Post() {

@@ -1,5 +1,5 @@
 
-package com.hannahj.noticeBoard.dao;
+package com.hannahj.bbs.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;

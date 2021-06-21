@@ -1,14 +1,14 @@
-package com.hannahj.noticeBoard.dao;
+package com.hannahj.bbs.dao;
 
 public enum PostColumns {
 	BOARD_IDX(1, "게시판"),
 	IDX(2, "번호"), 
 	USER_NAME(3, "작성자"), 
-	PW(4,"비밀번호"), 
-	TITLE(5, "글 제목"), 
-	DATETIME(6, "작성일"), 
-	CONTENT(7, "내용"),
-	PARENT_IDX(8, "원글");
+//	PW(4,"비밀번호"), 
+	TITLE(4, "글 제목"), 
+	DATETIME(5, "작성일"), 
+	CONTENT(6, "내용"),
+	PARENT_IDX(7, "원글");
 	public final int order;
 	public final String alias;
 	
