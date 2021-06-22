@@ -7,11 +7,10 @@ public class Post {
 	private int boardIdx;  //where it is nested
 	private int idx;
 	private String userName;
-	private String pw;
 	private String title;
 	private Date dateTime;
 	private String content;
-	private int parentIdx;
+	private Integer parentIdx;
 	private List<Post> comment;
 	
 	public int getBoardIdx() {
@@ -31,12 +30,6 @@ public class Post {
 	}
 	public void setUserName(String user_name) {
 		this.userName = user_name;
-	}
-	public String getPw() {
-		return pw;
-	}
-	public void setPw(String pw) {
-		this.pw = pw;
 	}
 	public String getTitle() {
 		return title;
@@ -63,31 +56,20 @@ public class Post {
 		this.parentIdx = parentIdx;
 	}	
 
-
-
-@Override
+	@Override
 	public String toString() {
-		return "Post [boardIdx=" + boardIdx + ", idx=" + idx + ", userName=" + userName + ", pw=" + pw + ", title="
-				+ title + ", dateTime=" + dateTime + ", content=" + content + ", parentIdx=" + parentIdx + ", comment="
+		return "Post [boardIdx=" + boardIdx + ", idx=" + idx + ", userName=" + userName + ", title=" + title
+				+ ", dateTime=" + dateTime + ", content=" + content + ", parentIdx=" + parentIdx + ", comment="
 				+ comment + "]";
 	}
-	//	public Post(String user_name, String pw, String title, String content) {
-//		this.userName = user_name;
-//		this.pw = pw;
-//		this.title = title;
-//		this.content = content;
-//	}
 	// 게시글 작성 시작
 	public Post(int boardIdx, String userName, String title,  String content) {
 		super();
 		this.boardIdx = boardIdx;
-		
 		this.userName = userName;
-		this.pw = null;
 		this.title = title;
 		this.dateTime = null;
 		this.content = content;
-		
 		this.comment = null;
 	}
 	public Post(int boardIdx, int idx, String userName, String title,  String content) {
@@ -105,7 +87,6 @@ public class Post {
 		this.boardIdx = boardIdx;
 		this.idx = idx;
 		this.userName = userName;
-		this.pw = null;
 		this.title = title;
 		this.dateTime = dateTime;
 		this.content = content;

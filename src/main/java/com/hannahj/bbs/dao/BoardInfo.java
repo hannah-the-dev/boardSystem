@@ -1,7 +1,8 @@
 package com.hannahj.bbs.dao;
 
 public enum BoardInfo {
-	NOTICE(1, "notice_board", "공지사항");
+	NOTICE(1, "notice_board", "공지사항"),
+	QNA(2, "qna_board", "문의게시판");
 	
 	public final int idx;
 	public final String columnName;

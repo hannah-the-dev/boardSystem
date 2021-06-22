@@ -25,9 +25,10 @@
     PostServiceImpl newPost = new PostServiceImpl();
     int thisId = newPost.getNextId();
     Post post = new Post(boardIdx, userName, title, content);
-    int parentIdx = 0;
-    if (request.getParameter("parentIdx") != null ) {
-    	parentIdx = Integer.parseInt(request.getParameter("parentIdx"));
+    out.println(post.toString());
+    
+    if (request.getParameter("parentIdx") != null) {
+    	Integer parentIdx = Integer.valueOf(request.getParameter("parentIdx"));
         post.setParentIdx(parentIdx);
     }
     newPost.write(post);
@@ -35,17 +36,17 @@
     %>
     <script>
       <% if (request.getParameter("parentIdx") != null) {
-        %>
+      %> 
         // 댓글 입력 후에는 원글로 이등
-      location.href="read.jsp?board=<%= boardIdx %>&idx=<%= parentIdx%>"
+      location.href="read.jsp?board=<%= boardIdx %>&idx=<%= request.getParameter("parentIdx")%>"
       <%
       } else {
-        %>
+      %>
         // 게시글 입력 후에는 작성한 게시글로 이동
       location.href="read.jsp?board=<%= boardIdx %>&idx=<%= thisId%>"
       <%
       }
-      %>
+      %> 
     </script>
   </body>
 </html>

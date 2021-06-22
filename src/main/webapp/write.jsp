@@ -32,7 +32,7 @@
       <tr>
         <th style="width:10%">게시판</th>
         <td> 
-        <select name="board">
+        <select name="board" required>
           <option value="">게시판을 선택하세요</option>
           <%
           BoardInfo[] boards = BoardInfo.values();
@@ -52,11 +52,11 @@
       </tr>
       <tr>
         <th><%=PostColumns.TITLE.alias %></th>
-        <td> <input type="text"  name="title"> </td>
+        <td> <input type="text"  name="title" required> </td>
       </tr>
       <tr>
         <th><%=PostColumns.USER_NAME.alias %></th>
-        <td> <input type="text" name="user_name"></td>
+        <td> <input type="text" name="userName" required></td>
       </tr>
       <tr>
         <th><%= PostColumns.DATETIME.alias %></th>
@@ -64,7 +64,7 @@
       </tr>
       <tr style="height:500px; vertical-align: top">
         <th><%=PostColumns.CONTENT.alias %></th>
-        <td> <textarea name='contents' cols=95 rows=50 wrap="hard"></textarea> </td>
+        <td> <textarea name='content' cols=95 rows=50 wrap="hard" required></textarea> </td>
       </tr>
     </table>
         <input type="hidden" name=board value=<%=boardIdx %>>

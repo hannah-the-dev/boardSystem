@@ -17,14 +17,28 @@
   <body>
     <%
     request.setCharacterEncoding("UTF-8");
-    int boardIdx = Integer.parseInt(request.getParameter("board"));
-    int idx = Integer.parseInt(request.getParameter("idx"));
+    int boardIdx = 0;
+    int idx = 0;
+    try {
+        boardIdx = Integer.parseInt(request.getParameter("board"));
+        idx = Integer.parseInt(request.getParameter("idx"));
+    } catch (NumberFormatException e) {
+        out.println("<html><body><h1>잘못된 접근입니다.</h1></body></html>");
+        return;
+    }
+    
     Calendar cal = Calendar.getInstance();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    
     PostServiceImpl notice = new PostServiceImpl();
-    Post post = notice.read(boardIdx, idx);
+    Post post = new Post();
+    int postCount = notice.getPostCount(boardIdx);
+    try {
+        post = notice.read(boardIdx, idx);
+    } catch (IndexOutOfBoundsException e) {
+    	out.println("<html><body><h1>잘못된 접근입니다.</h1></body></html>");
+        return;
+    }
     %>
         
   <h1><%=idx%> 번 게시글</h1>
@@ -68,7 +82,7 @@
       </tr>
       <tr style="vertical-align: top">
         <th><%=PostColumns.CONTENT.alias %></th>
-        <td height="60px"> <textarea name="content" readonly><%= notice.getClean(post.getContent()) %></textarea></td>
+        <td height="auto"> <textarea name="content" readonly><%= post.getContent() %></textarea></td>
       </tr>
     </table>
     <button formaction="board.jsp">목록</button>
@@ -77,9 +91,9 @@
     
   <h3>댓글</h3>
   <form>
-    <table>
+    <table class="comments">
       <% List<Post> comments = post.getComment();
-      if (comments.size() == 0) {
+      if (comments == null || comments.isEmpty()) {
        out.println("<p>등록된 댓글이 없어요! 이 글에 첫번째 댓글을 달아보세요.</p>"); 
       } else {
         for (Post comment : comments) { %>
@@ -115,11 +129,11 @@
       </tr>
       <tr>
         <th><%=PostColumns.TITLE.alias %></th>
-        <td> <input type="text" name="title"> </td>
+        <td> <input type="text" name="title" required> </td>
       </tr>
       <tr>
         <th><%=PostColumns.USER_NAME.alias %></th>
-        <td> <input type="text" name="userName"></td>
+        <td> <input type="text" name="userName" required></td>
       </tr>
       <tr>
         <th><%= PostColumns.DATETIME.alias %></th>
@@ -127,7 +141,7 @@
       </tr>
       <tr style="height:100px; vertical-align: top">
         <th><%=PostColumns.CONTENT.alias %></th>
-        <td> <textarea name='content' cols=95 rows=5 wrap="hard"></textarea> </td>
+        <td> <textarea name='content' cols=95 rows=5 wrap="hard" required></textarea> </td>
       </tr>
     </table>
         <input type="hidden" name=board value="<%=post.getBoardIdx()%>">

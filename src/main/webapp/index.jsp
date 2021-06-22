@@ -23,7 +23,7 @@
     <%
     BoardInfo[] boards = BoardInfo.values();
     for (BoardInfo board: boards) { %>
-      <tr class="post" onClick="location.href='board.jsp?board=<%= board.idx %>'">
+      <tr class="post" onClick="location.href='board.jsp?board=<%= board.idx %>&page=1'">
         <td> <%= board.idx %></td>
         <td> <%= board.alias %></td>
       </tr>      
