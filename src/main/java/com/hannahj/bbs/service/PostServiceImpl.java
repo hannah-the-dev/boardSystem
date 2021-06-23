@@ -64,7 +64,8 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public List<Post> search(String string, int page)  throws SQLException {
 		String regexp = getRegExp(string);
-		return dao.search(regexp, page);
+		int start = getSearchStartIdx(page, regexp);
+		return dao.search(regexp, start);
 	}
 	
 	@Override
