@@ -3,12 +3,12 @@ package com.hannahj.bbs.service;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.hannahj.bbs.dao.PostDaoImpl;
+import com.hannahj.bbs.dao.BoardItemDaoImpl;
 import com.hannahj.bbs.domain.Post;
 
 public class PostServiceImpl implements PostService {	
 //	create
-	PostDaoImpl dao = new PostDaoImpl();
+	BoardItemDaoImpl dao = new BoardItemDaoImpl();
 	public PostServiceImpl() throws ClassNotFoundException, SQLException {
 	}
 	
@@ -71,19 +71,19 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public int getStartIdx(int boardIdx, int page) throws SQLException {
 		int postCount = getPostCount(boardIdx);
-		page = (page > (postCount / PostDaoImpl.BOARDSIZE) +1) ? 
-				(postCount / PostDaoImpl.BOARDSIZE) +1 : page;
+		page = (page > (postCount / BoardItemDaoImpl.BOARDSIZE) +1) ? 
+				(postCount / BoardItemDaoImpl.BOARDSIZE) +1 : page;
 		page = (page <= 0) ? 1 : page;
-		int start = (page-1) * PostDaoImpl.BOARDSIZE;
+		int start = (page-1) * BoardItemDaoImpl.BOARDSIZE;
 		return start;
 	}
 	@Override
 	public int getSearchStartIdx(int page, String regexp) throws SQLException {
 		int searchCount = dao.getSearchCount(regexp);
-		page = (page > (searchCount / PostDaoImpl.BOARDSIZE) +1 ) ? 
-				(searchCount / PostDaoImpl.BOARDSIZE) +1 : page;
+		page = (page > (searchCount / BoardItemDaoImpl.BOARDSIZE) +1 ) ? 
+				(searchCount / BoardItemDaoImpl.BOARDSIZE) +1 : page;
 		page = (page <= 0) ? 1 : page;
-		int start = (page-1) * PostDaoImpl.BOARDSIZE;
+		int start = (page-1) * BoardItemDaoImpl.BOARDSIZE;
 		return start;
 	}
 	@Override

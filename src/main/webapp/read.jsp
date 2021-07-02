@@ -70,7 +70,7 @@
       </tr>
       <tr>
         <th><%=PostColumns.TITLE.alias %></th>
-        <td> <input type="text" name="title" value=<%= notice.getClean(post.getTitle()) %> readonly></td>
+        <td> <input type="text" name="title" value='<%= notice.getClean(post.getTitle()) %>' readonly></td>
       </tr>
       <tr>
         <th><%=PostColumns.USER_NAME.alias %></th>

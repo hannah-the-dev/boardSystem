@@ -9,16 +9,14 @@ import java.util.List;
 
 import com.hannahj.bbs.domain.Post;
 
-public class PostDaoImpl implements PostDao {
-//	Connection conn = ConnectionPool.getConnection();
-//	Statement stmt = conn.createStatement();
+public class BoardItemDaoImpl implements PostDao {
 	String query;
 	ResultSet rset;	
 	
 	public static int BOARDSIZE = 10;
 	public static int LISTSIZE = 10;
 	
-	public PostDaoImpl() throws ClassNotFoundException, SQLException {
+	public BoardItemDaoImpl() throws ClassNotFoundException, SQLException {
 	}
 	
 //	create
@@ -35,11 +33,7 @@ public class PostDaoImpl implements PostDao {
 				notice.getContent(), 
 				notice.getParentIdx()
 				);
-//		try {
-			stmt.execute(query);			
-//		} catch (SQLException e) {
-//			conn.rollback();
-//		}
+		stmt.execute(query);			
 		stmt.close();
 		conn.close();
 	}
