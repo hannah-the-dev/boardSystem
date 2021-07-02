@@ -40,13 +40,13 @@
       </tr>
     <%
     PostServiceImpl notice = new PostServiceImpl();
-        int startIdx = notice.getStartIdx(boardIdx, pager);
-        int startPage = ((startIdx) / BoardItemDaoImpl.BOARDSIZE)/BoardItemDaoImpl.LISTSIZE + 1;
-        int maxPage = notice.getPostCount(boardIdx) / BoardItemDaoImpl.LISTSIZE +1;
-        int endPage = (startPage * BoardItemDaoImpl.LISTSIZE > maxPage) ? 
-            maxPage : startPage * BoardItemDaoImpl.LISTSIZE +1;
-        List<Post> posts = notice.getList(boardIdx, startIdx);
-        for (Post post : posts) {
+            int startIdx = notice.getStartIdx(boardIdx, pager);
+            int startPage = ((startIdx) / PostDaoImpl.BOARDSIZE)/PostDaoImpl.LISTSIZE + 1;
+            int maxPage = notice.getPostCount(boardIdx) / PostDaoImpl.LISTSIZE +1;
+            int endPage = (startPage * PostDaoImpl.LISTSIZE > maxPage) ? 
+                maxPage : startPage * PostDaoImpl.LISTSIZE +1;
+            List<Post> posts = notice.getList(boardIdx, startIdx);
+            for (Post post : posts) {
     %>
       <tr class="post" onClick=
       "location.href='read.jsp?board=<%=post.getBoardIdx()%>&idx=<%= post.getIdx() %>'">

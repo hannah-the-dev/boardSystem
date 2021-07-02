@@ -38,14 +38,14 @@
       </tr>
     <%
     PostServiceImpl search = new PostServiceImpl();
-        List<Post> posts = search.search(keyword, pager);
-        String regexp = search.getRegExp(keyword);
-        int startIdx = search.getSearchStartIdx(pager, regexp);
-        int startPage = ((startIdx -1) / BoardItemDaoImpl.BOARDSIZE) + 1;
-        int maxPage = search.getSearchCount(regexp) / BoardItemDaoImpl.LISTSIZE +1;
-        int endPage = (startPage * BoardItemDaoImpl.LISTSIZE > maxPage) ? 
-            maxPage : startPage * BoardItemDaoImpl.LISTSIZE +1;
-        for (Post post : posts) {
+            List<Post> posts = search.search(keyword, pager);
+            String regexp = search.getRegExp(keyword);
+            int startIdx = search.getSearchStartIdx(pager, regexp);
+            int startPage = ((startIdx -1) / PostDaoImpl.BOARDSIZE) + 1;
+            int maxPage = search.getSearchCount(regexp) / PostDaoImpl.LISTSIZE +1;
+            int endPage = (startPage * PostDaoImpl.LISTSIZE > maxPage) ? 
+                maxPage : startPage * PostDaoImpl.LISTSIZE +1;
+            for (Post post : posts) {
     %>
       <tr class="post" onClick=
       "location.href='read.jsp?board=<%=post.getBoardIdx()%>&idx=<%= post.getIdx() %>'">
