@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.hannahj.springBoard.repo.mapper.SampleMapper">
+	<select id="findAll" resultType="com.hannahj.springBoard.domain.Sample">
+		select * 
+		from 
+			sample
+	</select>
+	<select id="findAllByCondition" resultType="com.hannahj.springBoard.domain.Sample">
+		select * 
+		from 
+			sample s
+		where 
+			1 = 1
+			<include refid="whereCondition"></include>
+	</select>
+	<sql id="whereCondition">
+		<if test="id!=0">
+			and s.title like #{title}
+		</if>
+	</sql>
+</mapper>

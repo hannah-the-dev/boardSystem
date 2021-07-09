@@ -1,0 +1,134 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap');
+
+/* https://coolors.co/233d4d-994636-cdcdcd-e6ebe0 */
+
+body {
+  color: rgb(35, 30, 35);
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 0 0 0 20%;
+}
+
+tr, td, th {
+  border: 1px solid rgb(52, 58, 64);
+  padding: 5px 15px 5px 15px;
+  border-left: none;
+  border-right: none;
+}
+
+th {
+  background-color: #e6ebe0;
+  color: #373f47;
+}
+
+table, h3 {
+  border-collapse: collapse;
+  margin: 10px 0 10px;
+  width: 800px;
+}
+
+.numbers {
+  text-align: right;
+  margin-right: 10%;
+}
+
+.new {
+  vertical-align: top;
+  background: #e6ebe0;
+}
+
+.comments {
+  font-size: 0.9rem;
+}
+
+/*   p { */
+/*     text-align: center; */
+/*   } */
+input:not(.button), textarea, select {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 1em;
+}
+
+input:not([type='submit']):focus,
+input:not([type='button']):focus,
+textarea:focus, 
+select {
+  outline: none;
+}
+  
+
+tr.post:hover {
+  cursor: pointer;
+}
+   
+
+/* https://coolors.co/233d4d-994636-cdcdcd-e6ebe0 */
+   
+:root {
+  --button-color: #cdcdcd;
+  --button-bg-color: #994636;
+  --button-hover-bg-color: #e6ebe0;
+}
+
+button,
+.button,
+input[type='button'],
+input[type='submit'] {
+  --webkit-appearance: none;
+  --moz-appearance: none;
+  appearance: none;
+   
+  margin: 0;
+  padding: 0.3rem 1rem; 
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  text-decoration: none;
+  
+  border: none;
+  border-radius: 4px;
+   
+  display: inline-block;
+  width: auto;
+   
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+   
+  cursor: pointer;
+  	 
+  transition: 0.5s;
+/*   --button-color: #373f47; */
+/*   --button-bg-color: #6096ba; */
+/*   --button-hover-bg-color: #ed6a5a; */
+}
+
+.button:not([disabled]) {
+  background: #6096ba;
+  color: #373f47;
+}
+
+/* .button[disabled] { */
+/*     color: -internal-light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3)); */
+/*     background-color: -internal-light-dark(rgba(239, 239, 239, 0.3), rgba(19, 1, 1, 0.3)); */
+/*     border-color: -internal-light-dark(rgba(118, 118, 118, 0.3), rgba(195, 195, 195, 0.3)); */
+/* } */
+
+
+
+textarea {
+  height: 10em;
+}
+  
+
+ul {
+  list-style: none;
+  margin: 10px 0 0 100px;
+}
+
+li {
+  float: left;
+  margin: 1em 1em 1em 1em;
+}
