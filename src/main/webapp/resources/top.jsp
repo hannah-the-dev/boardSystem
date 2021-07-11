@@ -6,6 +6,14 @@
 <title>Insert title here</title>
 <style type="text/css">
 /* https://coolors.co/233d4d-994636-cdcdcd-e6ebe0 */
+
+body {
+margin: 0;
+padding: 0;
+
+}
+
+
 #header, .search {
   display: flex;
   flex-direction: row;
@@ -24,6 +32,8 @@
   color: #CDCDCD;
   position: fixed;
   width: 100%;
+  position: fixed;
+  top: 0;
 }
 
 #searchbox input[type='text'] {

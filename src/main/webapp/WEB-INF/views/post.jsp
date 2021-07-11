@@ -25,13 +25,13 @@
   </script>
 </head>
 <body>
-  <div class="top"></div>
+  <nav class="top"></nav>
   
   <c:choose>
-    <c:when test="${post.board eq null}"><h1>해당 게시글이 존재하지 않아요!</h1>
+    <c:when test="${post.board eq null}"><h1 class="warning">해당 게시글이 존재하지 않아요!</h1>
     <button onclick="history.back(-1);" class="button">뒤로 가기</button> 
     </c:when>
-    <c:otherwise><h1>${post.id}번 게시글</h1>
+    <c:otherwise><div class="title"><h1>${post.id}번 게시글</h1></div>
   <form>
     <table>
       <tr>

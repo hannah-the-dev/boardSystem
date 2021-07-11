@@ -2,31 +2,42 @@ package com.hannahj.springBoard;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.hibernate.Hibernate;
 import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+
+import static org.springframework.test.web.servlet.MockMvc.*;
+import static org.springframework.util.LinkedMultiValueMap.*;
+import static org.springframework.util.MultiValueMap.*;
 import com.hannahj.springBoard.domain.Board;
 import com.hannahj.springBoard.domain.BoardItem;
 import com.hannahj.springBoard.repository.BoardItemRepository;
 import com.hannahj.springBoard.repository.BoardRepository;
+import com.hannahj.springBoard.web.BoardController;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //@Transactional
+@WebMvcTest(BoardController.class)
 class SpringBoardApplicationTests {
 
     @Autowired
@@ -34,24 +45,33 @@ class SpringBoardApplicationTests {
     @Autowired
     private BoardItemRepository boardItemRepo;
     
+    @Autowired
+    private  MockMvc mockMvc;
+    
+   
+    
 //	@Test
 	void contextLoads() {
 	}
 	
 //	@Test
-	Long create() {
+	void create() {
 
 	    Board board = Board.builder()
-	            .title("Test4")
+	            .title("공지게시판")
 	            .build();
 
 	    BoardItem boardItem1 = BoardItem.builder()
 	            .board(board)
-	            .title("TestPost1")
+	            .title("첫번째 공지")
+	            .username("관리자1")
+	            .content("게시판을 개설했습니다.")
 	            .build();
 	    BoardItem boardItem2 = BoardItem.builder()
 	            .board(board)
-	            .title("TestPost2")
+	            .title("두번째 공지")
+                .username("관리자1")
+                .content("이벤트는 뭘로 하면 좋을까요?")
 	            .build();
 	    
 	    
@@ -61,7 +81,7 @@ class SpringBoardApplicationTests {
 	    
 	    board.setBoardItems(list);
 	    boardRepo.save(board);
-	    return board.getId();
+//	    return board.getId();
 	}
 	
 //	@Test
@@ -75,7 +95,7 @@ class SpringBoardApplicationTests {
 	    }
 	}
     
-    @Test
+//    @Test
     void createPost() {
 	    Optional<Board> boardOptional = boardRepo.findById(3L);
 	    if (!boardOptional.isPresent()) {
@@ -133,4 +153,6 @@ class SpringBoardApplicationTests {
 	    List<BoardItem> boardItems = board.getBoardItems();
 	    assertNotNull(boardItems);
 	}
+	
+	
 }

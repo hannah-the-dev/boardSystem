@@ -18,7 +18,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.Singular;
 
-@Getter @Setter
+
+@Getter @Setter 
 @Builder @NoArgsConstructor @AllArgsConstructor
 @Entity
 public class Board {
