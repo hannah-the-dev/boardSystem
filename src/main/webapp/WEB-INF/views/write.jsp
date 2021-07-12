@@ -14,9 +14,21 @@
   <c:set var='path' value='${pageContext.request.contextPath}' />
   <link href="${path}/resources/post.css" rel="stylesheet" type="text/css">
   <title>게시판</title>
+    <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+  <script>
+  $(function(){
+    $(".top").load("${path}/resources/top.jsp");
+  })
+  </script>
 </head>
 <body>
-  <h1>글 작성</h1>
+  <nav class="top"></nav>
+  <div class="main">
+  <div class="title">
+  <h1>글 작성</h1></div>
    <form method=post>
     <table>
       <tr>
@@ -57,6 +69,6 @@
     <input type="reset" class="button">
     <input type="submit" class="button" formaction=${path}/post/writer>
   </form>
-
+  </div>
   </body>
 </html>

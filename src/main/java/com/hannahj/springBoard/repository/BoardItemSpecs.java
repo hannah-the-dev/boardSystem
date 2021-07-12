@@ -44,37 +44,37 @@ public class BoardItemSpecs {
 	
 	//service로 돌림
     public static String getExpression (String string) {
-        String[] expArr = string.split("%20");
+        String[] expArr = string.split(" ");
         String regexp = String.join("|", expArr);
         return regexp;
     }
     
-    public static Predicate searchPred(String keywords) {
-        String[] searches = keywords.split(" ");
-        EntityManager entityManager = null;
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        
-        CriteriaQuery<BoardItem> criteriaQuery = criteriaBuilder.createQuery(BoardItem.class);
-        Root<BoardItem> itemRoot = criteriaQuery.from(BoardItem.class);
-        Predicate predicateForTitleLike = null;
-        Predicate predicateForContentLike = null;
-        for (String search : searches) {
-            predicateForTitleLike
-            = criteriaBuilder.like(itemRoot.get("title"), search.toLowerCase());
-            predicateForContentLike
-            = criteriaBuilder.like(itemRoot.get("content"), search.toLowerCase());
-        }
-        Predicate predicateForTitleAndContentLike
-          = criteriaBuilder.or(predicateForTitleLike, predicateForContentLike);
-    
-        Predicate predicateForPidNull
-          = criteriaBuilder.equal(itemRoot.get("parentId"), null);
-        
-        Predicate finalPredicate
-          = criteriaBuilder
-          .or(predicateForTitleAndContentLike, predicateForPidNull);
-        criteriaQuery.where(finalPredicate);
-        List<BoardItem> items = entityManager.createQuery(criteriaQuery).getResultList();
-        return finalPredicate;
-    }
+//    public static Predicate searchPred(String keywords) {
+//        String[] searches = keywords.split(" ");
+//        EntityManager entityManager = null;
+//        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+//        
+//        CriteriaQuery<BoardItem> criteriaQuery = criteriaBuilder.createQuery(BoardItem.class);
+//        Root<BoardItem> itemRoot = criteriaQuery.from(BoardItem.class);
+//        Predicate predicateForTitleLike = null;
+//        Predicate predicateForContentLike = null;
+//        for (String search : searches) {
+//            predicateForTitleLike
+//            = criteriaBuilder.like(itemRoot.get("title"), search.toLowerCase());
+//            predicateForContentLike
+//            = criteriaBuilder.like(itemRoot.get("content"), search.toLowerCase());
+//        }
+//        Predicate predicateForTitleAndContentLike
+//          = criteriaBuilder.or(predicateForTitleLike, predicateForContentLike);
+//    
+//        Predicate predicateForPidNull
+//          = criteriaBuilder.equal(itemRoot.get("parentId"), null);
+//        
+//        Predicate finalPredicate
+//          = criteriaBuilder
+//          .or(predicateForTitleAndContentLike, predicateForPidNull);
+//        criteriaQuery.where(finalPredicate);
+//        List<BoardItem> items = entityManager.createQuery(criteriaQuery).getResultList();
+//        return finalPredicate;
+//    }
 }

@@ -16,15 +16,25 @@ html {
 
 }
 
+.top {
+margin: 0;
+padding: 0;
+}
+
+
 .title {
     margin: 3rem 2rem 0;
 }
 
-body {
+.main {
+   padding: 0 0 0 10%;
+}
+
+body:not(.logo) {
   color: rgb(35, 30, 35);
   font-family: 'Noto Sans KR', sans-serif;
-  padding: 0 0 0 20%;
 }
+
 
 tr, td, th {
   border: 1px solid rgb(52, 58, 64);
@@ -34,7 +44,7 @@ tr, td, th {
 }
 
 th {
-  background-color: #e6ebe0;
+  background-color: #e3e4db;
   color: #373f47;
 }
 
@@ -45,7 +55,7 @@ table, h3 {
 }
 
 .numbers {
-  text-align: right;
+  text-align: center;
   margin-right: 10%;
 }
 
@@ -77,7 +87,8 @@ select {
 }
   
 
-tr.post:hover {
+tr.post:hover,
+.top div {
   cursor: pointer;
 }
    
@@ -86,14 +97,14 @@ tr.post:hover {
    
 :root {
   --button-color: #cdcdcd;
-  --button-bg-color: #994636;
-  --button-hover-bg-color: #e6ebe0;
+  --button-bg-color: #b15e6c;
+  --button-hover-bg-color: #7d5c65;
 }
 
 button,
 .button,
 input[type='button'],
-input[type='submit'] {
+input[type='submit']:not([id='searchbutton']) {
   --webkit-appearance: none;
   --moz-appearance: none;
   appearance: none;
@@ -122,9 +133,9 @@ input[type='submit'] {
 /*   --button-hover-bg-color: #ed6a5a; */
 }
 
-.button:not([disabled]) {
-  background: #6096ba;
-  color: #373f47;
+.button:not([disabled]), button {
+  background: #b15e6c;
+  color: #cdcdcd;
 }
 
 /* .button[disabled] { */
@@ -149,3 +160,45 @@ li {
   float: left;
   margin: 1em 1em 1em 1em;
 }
+
+
+/* 페이지처리 */
+.text-xs-center {
+	text-align:center;
+	font-size:0;
+ }
+.pagination {
+	justify-content: center;
+}
+.pagination .page-item {
+	display:block;
+	margin:0 3px;
+	float:left;
+	border:1px solid #e3e4db;
+	min-width:28px;
+	height:28px;
+	line-height:28px;
+	text-align:center;
+	background-color:#cdcdcd;
+	font-size:13px;
+	color:#233d4d;
+}
+
+.pagenation .first,
+.pagenation .last {
+  width: 35px;
+}
+
+.pagination .disabled {
+	background-color:#233d4d;
+	border:1px solid #233d4d;
+}
+
+a.page-link {
+  color: #233d4d;
+  text-decoration: none;
+}
+li.disabled a {
+  color: #cdcdcd;
+}
+

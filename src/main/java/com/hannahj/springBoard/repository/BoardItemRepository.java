@@ -2,6 +2,8 @@ package com.hannahj.springBoard.repository;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -34,11 +36,13 @@ public interface BoardItemRepository extends JpaRepository<BoardItem, Long>, Jpa
 	Page<BoardItem> findAllByBoardAndParentIdIsNull(Board board, Pageable pageable);
 	
 //	@Query(nativeQuery = true, 
-//	        value="SELECT * FROM board_item WHERE parent_id is null AND regexp_like (title, :expression)",
+//	        value="SELECT * FROM board_item WHERE (title like (:expression) OR content like (:expression))",
 //	        countQuery = "SELECT count(*) FROM board_item")
-	@Query("select b from BoardItem b where (title like concat('%', :expression, '%') "
-            + "or content like concat('%', :expression, '%') and b.parentId is null")
-	Page<BoardItem> findAllByParentIdIsNullAndTitleLike(String expression, Pageable pageable);
+//	@Query("select b from BoardItem b where (b.title like concat('%', :expression, '%') "
+//            + "or b.content like concat('%', :expression, '%') and b.parentId is null")
+//	Page<BoardItem> findAllPostsWithTitleAndContentLike(String expression, Pageable pageable);
 
+	List<BoardItem> findByParentIdIsNullAndTitleLikeIgnoreCaseOrParentIdIsNullAndContentLikeIgnoreCase(String expression, String expression1);
+	
     Page<BoardItem> findByParentId(Specification<BoardItem> search, Pageable pageable);
 }

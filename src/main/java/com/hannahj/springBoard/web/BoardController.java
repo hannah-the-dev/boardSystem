@@ -1,12 +1,16 @@
 package com.hannahj.springBoard.web;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -82,36 +86,54 @@ public class BoardController {
         return "/write";
     }
 
-//	@GetMapping("/search")
-//	@ResponseBody @Transactional(readOnly = true)
-//	 public List<BoardItem> search(
-//	         @RequestParam(value="keywords") String keywords,
-//	         @PageableDefault(sort = { "id" }, direction = Direction.DESC) Pageable pageable
-//	         ) {
+	@GetMapping({"/search", "/post/search"})
+	 public String search(
+	         @RequestParam(value="keywords") String keywords,
+	         @PageableDefault(sort = { "id" }, direction = Direction.DESC) Pageable pageable,
+	         Model model) {
 //	    BoardItemSpecs postSpecs = new BoardItemSpecs();
-////	    String expression = postSpecs.getExpression(keywords);
-//	    List<BoardItem> found = postRepo.searching(keywords);
-////	    List<BoardItem> list = found.getContent();
-//        return found;
-//	    
-//	}
-
-    @GetMapping(value = "/search")
-    @ResponseBody
-    public Optional<Page<BoardItem>> search(
-            @RequestParam(value = "keywords") String keywords,
-            @PageableDefault(sort = { "id" }, direction = Direction.DESC) Pageable pageable, 
-            Model model) {
-        Map<String, Object> filter = new HashMap<String, Object>();
-        String[] searches = keywords.split(" ");
-        for(String search: searches) {
-            filter.put("title", "%" + search + "%");
-            filter.put("content", "%" + search + "%");
+//	    String expression = BoardItemSpecs.getExpression(keywords);
+        System.out.println(pageable.toString());
+//	        Page<BoardItem> found = postRepo.findAllPostsWithTitleAndContentLike(expression, pageable);
+        String[] words = keywords.split(" ");
+        Map<Long, BoardItem> result = new LinkedHashMap<>();
+        for(String word : words) {
+            List<BoardItem> posts = postRepo.findByParentIdIsNullAndTitleLikeIgnoreCaseOrParentIdIsNullAndContentLikeIgnoreCase('%'+word+'%','%'+word+'%');
+            for (BoardItem post: posts) {
+                result.put(post.getId(), post);
+            }
         }
+        int start = (int) pageable.getOffset();
+        int end = (start + pageable.getPageSize()) > result.size() ? result.size() :
+            (start + pageable.getPageSize());
+        Page<BoardItem> pagedResult = new PageImpl<> ((new ArrayList<BoardItem> (result.values())).subList(start,end), pageable, pageable.getPageSize());
+	    model.addAttribute("result", pagedResult);
+	    model.addAttribute("keyword",keywords);
+	    
+	    Criteria criteria = new Criteria(pagedResult);
+        model.addAttribute("startBlockPage", criteria.getStartBlockPage());
+        model.addAttribute("endBlockPage", criteria.getEndBlockPage());
+	    
+        return "/search";
+	    
+	}
 
-        Page<BoardItem> page = postRepo.findAllByParentIdIsNullAndTitleLike(keywords, pageable);
-        return Optional.of(page);
-    }
+//    @GetMapping(value = "/search")
+//    @ResponseBody
+//    public Optional<Page<BoardItem>> search(
+//            @RequestParam(value = "keywords") String keywords,
+//            @PageableDefault(sort = { "id" }, direction = Direction.DESC) Pageable pageable, 
+//            Model model) {
+//        Map<String, Object> filter = new HashMap<String, Object>();
+//        String[] searches = keywords.split(" ");
+//        for(String search: searches) {
+//            filter.put("title", "%" + search + "%");
+//            filter.put("content", "%" + search + "%");
+//        }
+//
+//        Page<BoardItem> page = postRepo.findAllPostsWithTitleAndContentLike(keywords, pageable);
+//        return Optional.of(page);
+//    }
 	
 	
 

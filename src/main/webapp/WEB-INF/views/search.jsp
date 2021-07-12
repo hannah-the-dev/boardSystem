@@ -1,78 +1,94 @@
-<%@ page import="com.hannahj.bbs.domain.*"%>
-<%@ page import="com.hannahj.bbs.dao.*" %>
-<%@ page import="com.hannahj.bbs.service.*" %>
+<%@ page import="com.hannahj.springBoard.domain.*"%>
+<%@ page import="com.hannahj.springBoard.repository.*"%>
+<%@ page import="com.hannahj.springBoard.service.*"%>
 
-<%@ page import="java.util.*" %>
+<%@ page import="java.util.*"%>
 
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
   <head>
   <meta charset="UTF-8">
-  <link href="post.css" rel="stylesheet" type="text/css">
-
-  <title>게시판</title>
+  <c:set var='path' value='${pageContext.request.contextPath}' />
+  <link href="${path}/resources/post.css" rel="stylesheet" type="text/css">
+  <title>${keyword} 검색결과</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"
+></script>
+<script>
+  $(function() {
+    $(".top").load("${path}/resources/top.jsp");
+  })
+</script>
 </head>
   <body>
-    <%
-    request.setCharacterEncoding("UTF-8");
-    String keyword = null;
-    int pager = 1;
-    try {
-        keyword = request.getParameter("keyword");
-        pager = (request.getParameter("page") == null) ? 1 : Integer.parseInt(request.getParameter("page"));
-    } catch (Exception e) {
-    	out.println("<html><body><h1>잘못된 접근입니다.</h1></body></html>");
-        return;
-    }
-    %>
-  <h1>"<%=keyword %>" 검색 결과</h1>
+  <nav class="top"></nav>
+  <div class="title">
+  <h1>"${keyword}" 검색 결과</h1></div>
     <table>
       <tr>
-        <th style="width:15%"><%=PostColumns.BOARD_IDX.alias %></th>
-        <th style="width:10%"><%=PostColumns.IDX.alias %></th>
-        <th style="width:45%"><%=PostColumns.TITLE.alias %></th>
-        <th style="width:15%"><%=PostColumns.USER_NAME.alias %></th>
-        <th style="width:15%"><%=PostColumns.DATETIME.alias %></th>
+        <th style="width:15%">게시판 이름</th>
+        <th style="width:10%">번호</th>
+        <th style="width:45%">제목</th>
+        <th style="width:15%">작성자</th>
+        <th style="width:15%">작성일</th>
       </tr>
-    <%
-    PostServiceImpl search = new PostServiceImpl();
-            List<Post> posts = search.search(keyword, pager);
-            String regexp = search.getRegExp(keyword);
-            int startIdx = search.getSearchStartIdx(pager, regexp);
-            int startPage = ((startIdx -1) / PostDaoImpl.BOARDSIZE) + 1;
-            int maxPage = search.getSearchCount(regexp) / PostDaoImpl.LISTSIZE +1;
-            int endPage = (startPage * PostDaoImpl.LISTSIZE > maxPage) ? 
-                maxPage : startPage * PostDaoImpl.LISTSIZE +1;
-            for (Post post : posts) {
-    %>
-      <tr class="post" onClick=
-      "location.href='read.jsp?board=<%=post.getBoardIdx()%>&idx=<%= post.getIdx() %>'">
-        <td> <%= BoardInfo.getBoardInfo(post.getBoardIdx()).alias %></td>
-        <td> <%= post.getIdx() %></td>
-        <td> <%= post.getTitle() %></td>
-        <td> <%= post.getUserName() %></td>
-        <td> <%= post.getDateTime() %></td>
-      </tr>      
-    <% 
-    }     
-    %>
+ <c:forEach var='post' items='${result.content}' varStatus="status">
+      <tr class="post" onClick="location.href='${path}/post/${post.id}'">
+<%--         <td>${status.index}</td> --%>
+        <td>${post.board.id}</td>
+        <td>${result.totalElements - ( result.number ) * result.size - status.index}</td>
+        <td>${post.title}</td>
+        <td>${post.username}</td>
+        <fmt:parseDate value="${ post.createdDate }" pattern="yyyy-MM-dd'T'HH:mm:ss" var="created" type="both" />
+        <td> <fmt:formatDate value="${created}" pattern="yyyy-MM-dd"/></td>
+        
+      </tr>
+    </c:forEach>    
     </table>
-    <ul>
-      <%     
-      if(startPage > 1) { 
-      %>
-      <li> <a href="search.jsp?keyword='<%=keyword %>'&page=
-      <%= startPage -1%>"> &#12298; </a> 
-        </li>
-      <% }
-      for (int i = startPage; i <= endPage; i++) { %>
-      <li> <a href="search.jsp?keyword=<%=keyword %>&page=<%= i %>"><%= i %></a> </li> 
-      <% } 
-       if (maxPage != endPage) {%>
-      <li> <a href="search.jsp?keyword=<%=keyword %>&page=<%=endPage%>"> &#12299; </a> </li>
-       <% }%>
+
+  <!-- 페이징 영역 시작 -->
+  <div class="text-xs-center">
+    <ul class="pagination justify-content-center">
+      <!-- 이전 -->
+      
+      <c:choose>
+        <c:when test="${result.first}"></c:when>
+        <c:otherwise>
+          <li class="page-item"><a class="page-link"
+            href="${path}/search?keywords=${keyword}&page=1">처음</a></li>
+          <li class="page-item"><a class="page-link"
+            href="${path}/search?keywords=${keyword}&page=${result.number-1}">&larr;</a></li>
+        </c:otherwise>
+      </c:choose>
+      <!-- 페이지 그룹 -->
+      <c:forEach begin="${startBlockPage}" end="${endBlockPage}" var="i">
+        <c:choose>
+          <c:when test="${postPage.pageable.pageNumber+1 == i}">
+            <li class="page-item disabled"><a class="page-link"
+              href="${path}/board?id=${board.id}&page=${i+1}">${i}</a></li>
+          </c:when>
+          <c:otherwise>
+            <li class="page-item"><a class="page-link"
+              href="${path}/search?keywords=${keyword}&page=${i}">${i}</a></li>
+          </c:otherwise>
+        </c:choose>
+      </c:forEach>
+      <!-- 다음 -->
+      <c:choose>
+        <c:when test="${result.last}">
+        </c:when>
+        <c:otherwise>
+          <li class="page-item "><a class="page-link"
+            href="${path}/search?keywords=${keyword}&page=${result.number+2}">&rarr;</a></li>
+          <li class="page-item "><a class="page-link"
+            href="${path}/search?keywords=${keyword}&page=${result.totalPages}">마지막</a></li>
+        </c:otherwise>
+      </c:choose>
     </ul>
+  </div>
+  <!-- 페이징 영역 끝 -->
   </body>
 </html>

@@ -5,7 +5,8 @@
 <%@ page import="java.util.*" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -14,6 +15,7 @@
   <meta charset="UTF-8">
   <c:set var='path' value='${pageContext.request.contextPath}'/>
   <link href="${path}/resources/post.css" rel="stylesheet" type="text/css">
+  
   <title>게시판</title>
   <script
   src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -26,70 +28,75 @@
   </script>
 </head>
   <body>
-  <div class="top"></div>
-  <h1>${board.title}</h1>
-    <table>
-      <tr>
-        <th style="width:10%">번호</th>
-        <th style="width:50%">제목</th>
-        <th style="width:15%">작성자</th>
-        <th style="width:15%">작성일</th>
-      </tr>
-<%--       <c:set var='postPage' value="${postPage}"/> --%>
- <c:forEach var='post' items='${postPage.content}' varStatus="status">
-      <tr class="post" onClick="location.href='${path}/post/${post.id}'">
-<%--         <td>${status.index}</td> --%>
-        <td>${postPage.totalElements - ( postPage.number ) * postPage.size - status.index}</td>
-        <td>${post.title}</td>
-      </tr>
-    </c:forEach>
-  </table>
-
-    <button onClick="location.href='${path}/write?board=${board.id}'">글쓰기</button>
-    
-    
-    
-  <!-- 페이징 영역 시작 -->
-  <div class="text-xs-center">
-    <ul class="pagination justify-content-center">
-      <!-- 이전 -->
+  <nav class="top"></nav>
+  <div class="main">
+    <div class="title"><h1>${board.title}</h1></div>
+      <table>
+        <tr>
+          <th style="width:10%">번호</th>
+          <th style="width:50%">제목</th>
+          <th style="width:15%">작성자</th>
+          <th style="width:15%">작성일</th>
+        </tr>
+  <%--       <c:set var='postPage' value="${postPage}"/> --%>
+   <c:forEach var='post' items='${postPage.content}' varStatus="status">
+        <tr class="post" onClick="location.href='${path}/post/${post.id}'">
+  <%--         <td>${status.index}</td> --%>
+          <td>${postPage.totalElements - ( postPage.number ) * postPage.size - status.index}</td>
+          <td>${post.title}(${post.commentSize})</td>
+          <td>${post.username}</td>
+          <fmt:parseDate value="${ post.createdDate }" pattern="yyyy-MM-dd'T'HH:mm:ss" var="created" type="both" />
+          <td> <fmt:formatDate value="${created}" pattern="yyyy-MM-dd"/></td>
+          
+        </tr>
+      </c:forEach>
+    </table>
+  
+      <button onClick="location.href='${path}/write?board=${board.id}'">글쓰기</button>
       
-      <c:choose>
-        <c:when test="${postPage.first}"></c:when>
-        <c:otherwise>
-          <li class="page-item"><a class="page-link"
-            href="${path}/board?id=${board.id}&page=1">처음</a></li>
-          <li class="page-item"><a class="page-link"
-            href="${path}/board?id=${board.id}&page=${postPage.number-1}">&larr;</a></li>
-        </c:otherwise>
-      </c:choose>
-      <!-- 페이지 그룹 -->
-      <c:forEach begin="${startBlockPage}" end="${endBlockPage}" var="i">
+      
+      
+    <!-- 페이징 영역 시작 -->
+    <div class="text-xs-center">
+      <ul class="pagination justify-content-center">
+        <!-- 이전 -->
+        
         <c:choose>
-          <c:when test="${postPage.pageable.pageNumber+1 == i}">
-            <li class="page-item disabled"><a class="page-link"
-              href="${path}/board?id=${board.id}&page=${i+1}">${i}</a></li>
-          </c:when>
+          <c:when test="${postPage.first}"></c:when>
           <c:otherwise>
-            <li class="page-item"><a class="page-link"
-              href="${path}/board?id=${board.id}&page=${i}">${i}</a></li>
+            <li class="page-item first"><a class="page-link"
+              href="${path}/board?id=${board.id}&page=1">처음</a></li>
+            <li class="page-item arrow"><a class="page-link"
+              href="${path}/board?id=${board.id}&page=${postPage.number-1}">&larr;</a></li>
           </c:otherwise>
         </c:choose>
-      </c:forEach>
-      <!-- 다음 -->
-      <c:choose>
-        <c:when test="${postPage.last}">
-        </c:when>
-        <c:otherwise>
-          <li class="page-item "><a class="page-link"
-            href="${path}/board?id=${board.id}&page=${postPage.number+2}">&rarr;</a></li>
-          <li class="page-item "><a class="page-link"
-            href="${path}/board?id=${board.id}&page=${postPage.totalPages}">마지막</a></li>
-        </c:otherwise>
-      </c:choose>
-    </ul>
+        <!-- 페이지 그룹 -->
+        <c:forEach begin="${startBlockPage}" end="${endBlockPage}" var="i">
+          <c:choose>
+            <c:when test="${postPage.pageable.pageNumber+1 == i}">
+              <li class="page-item disabled"><a class="page-link"
+                href="${path}/board?id=${board.id}&page=${i-1}">${i}</a></li>
+            </c:when>
+            <c:otherwise>
+              <li class="page-item"><a class="page-link"
+                href="${path}/board?id=${board.id}&page=${i-1}">${i}</a></li>
+            </c:otherwise>
+          </c:choose>
+        </c:forEach>
+        <!-- 다음 -->
+        <c:choose>
+          <c:when test="${postPage.last}">
+          </c:when>
+          <c:otherwise>
+            <li class="page-item arrow"><a class="page-link"
+              href="${path}/board?id=${board.id}&page=${postPage.number+2}">&rarr;</a></li>
+            <li class="page-item last"><a class="page-link"
+              href="${path}/board?id=${board.id}&page=${postPage.totalPages}">마지막</a></li>
+          </c:otherwise>
+        </c:choose>
+      </ul>
+    </div>
+    <!-- 페이징 영역 끝 -->
   </div>
-  <!-- 페이징 영역 끝 -->
-
   </body>
 </html>
