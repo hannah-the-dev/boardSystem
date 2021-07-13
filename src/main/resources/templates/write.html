@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/top::head">
+</head>
+  <body>
+  <nav class="top" th:insert="/top::topnav"></nav>
+  <div class="main">
+
+  <div class="title">
+  <h1>글 작성</h1></div>
+   <form method=post>
+    <table>
+      <tr>
+        <th style="width:10%">게시판</th>
+        <td> 
+          <select name="board" >
+            <option value="" selected>게시판을 선택하세요</option>
+            <option th:each='board: ${boards}' value='${board.id}'
+              th:selected="${board.id eq id}" class="selectable"
+              th:text='${board.title}'> 
+            </option>
+          </select>
+      </tr>
+      <tr>  
+        <th style="width:10%">글 번호</th>
+        <td> 새 글 </td>
+      </tr>
+      <tr>
+        <th>글 제목</th>
+        <td><input type="text"  name="title" required></td>
+      </tr>
+      <tr>
+        <th>작성자</th>
+        <td> <input type="text" name="username" class='editable' required></td>
+      </tr>
+      <tr>
+        <th>작성일</th>
+        <td th:text="${#dates.format(#dates.createNow(),'yyyy-MM-dd HH:mm')}"> 
+      </tr>
+      <tr style="vertical-align: top">
+        <th>내용</th>
+        <td height="auto"> <textarea name="content" class='editable' required></textarea></td>
+      </tr>
+    </table>
+    <input type="button" class="button" th:onClick="'location.href=\''+${/board(id=${post.board.id})}+'\''" value="목록">
+    <input type="reset" class="button">
+    <input type="submit" class="button" th:formaction='@{/post/writer}'>
+  </form>
+  </div>
+  </body>
+</html>
