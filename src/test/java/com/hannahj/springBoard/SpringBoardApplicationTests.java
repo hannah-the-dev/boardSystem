@@ -117,7 +117,7 @@ class SpringBoardApplicationTests {
 //	@Test @Order(1)
 //	@Transactional
 	void delete() {
-	    long id = create();
+	    long id = 1L;
 	    Optional<Board> boardOptional;
 	    Board board;
 	    if (boardRepo.existsById(id)) {
