@@ -39,12 +39,6 @@ public class BoardController {
     @Autowired
     private BoardItemRepository postRepo;
 
-//	@GetMapping(value="/")
-//	public String list(Pageable pageable, Model model) {	    
-//	    model.addAttribute("boardList", boardRepo.findAll(pageable));
-//	    return "/index";
-//	}
-
     @GetMapping({ "/index", "/" })
     public String boardList(@PageableDefault(sort = { "id" }, direction = Direction.DESC) Pageable pageable,
             Model model) {
@@ -72,7 +66,7 @@ public class BoardController {
         Criteria criteria = new Criteria(postPage);
         model.addAttribute("startBlockPage", criteria.getStartBlockPage());
         model.addAttribute("endBlockPage", criteria.getEndBlockPage());
-        model.addAttribute("postPage", postPage);
+        model.addAttribute("page", postPage);
         model.addAttribute("board", board);
         return "/board";
     }

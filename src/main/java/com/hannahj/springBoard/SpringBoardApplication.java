@@ -12,7 +12,6 @@ import org.springframework.data.web.config.PageableHandlerMethodArgumentResolver
 
 @SpringBootApplication
 @EntityScan("com.hannahj.springBoard.domain")
-//@ComponentScan
 @EnableJpaAuditing
 @EnableJpaRepositories("com.hannahj.springBoard.repository")
 public class SpringBoardApplication {

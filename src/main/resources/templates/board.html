@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/top::head">
+</head>
+  <body>
+  <nav class="top" th:insert="/top::topnav"></nav>
+  <div class="main">
+    <div class="title"><h1 th:text="${board.title}"></h1></div>
+      <table>
+        <tr>
+          <th style="width:10%">번호</th>
+          <th style="width:50%">제목</th>
+          <th style="width:15%">작성자</th>
+          <th style="width:15%">작성일</th>
+        </tr>
+        <tr th:each='post: ${page.content}'
+         class="post" th:onClick="'location.href=\''+@{/post/${post.id}}+'\''">
+          <td th:text='${page.totalElements - ( page.number ) * page.size - postStat.index}'></td>
+          <td th:text='|${post.title}(${post.commentSize})|'></td>
+          <td th:text='${post.username}'></td>
+          <td th:text='${#temporals.format(post.createdDate, "yyyy-MM-dd")}'></td>
+        </tr>
+    </table>
+  
+      <button th:onClick="'location.href=\''+@{/write(board=${board.id})}+'\''">글쓰기</button>
+      
+  <!-- 페이징 영역 시작 -->
+  <div class="text-xs-center">
+    <ul class="pagination justify-content-center">
+<!--       이전 -->
+      <li th:unless="${page.first}" class="page-item"><a class="page-link" th:href="@{''(id=${board.id}, page=1)}">처음</a></li>
+      <li th:unless="${page.first}" class="page-item"><a class="page-link" th:href="@{''(id=${board.id}, page=${page.number-1)}">&larr;</a></li>
+<!--       페이지 그룹 -->
+      <li class='page-item' th:each="this: ${#numbers.sequence(startBlockPage, endBlockPage)}"
+      th:classappend="${this == page.number} ? 'disabled'">
+      <a class="page-link" th:href="@{''(id=${board.id}, page=${page.number})}" th:text='${page.number+1}'></a></li>
+<!--       다음 -->
+      <li th:unless="${page.last}" class="page-item"><a class="page-link" th:href="@{''(id=${board.id}, page=${page.number+2)}">&rarr;</a></li>
+      <li th:unless="${page.last}" class="page-item"><a class="page-link" th:href="@{''(id=${board.id}, page=${page.totalPages})}">끝</a></li>
+    </ul>
+  </div>
+  <!-- 페이징 영역 끝 -->      
+  </div>
+  </body>
+</html>

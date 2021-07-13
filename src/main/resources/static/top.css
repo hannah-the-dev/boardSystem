@@ -1,0 +1,57 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
+
+#header {
+  margin: 0;
+}
+
+.logo {
+  font-family: 'Fredericka the Great', cursive;
+  position: fixed;
+  color: #cdcdcd;
+  left: 5px;
+  font-size: 1.3em;
+}
+
+#header, .search {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+#header div:not(.search) {
+  display: inline-block;
+}
+
+#header > div:not(.search) {
+  padding: .5rem 1em;
+}
+
+#header {
+  background-color: #233d4d;
+  color: #CDCDCD;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  justify-content: space-between;
+    
+}
+
+#searchbox input[type='text'] {
+  border-radius: .7em;
+  margin: .5rem 0 .5rem .5rem;
+  padding: 0 1rem;
+}
+
+#searchbox {
+  margin: 0 0 0 1rem;
+}
+
+.headerbutton {
+  color: #cdcdcd;
+  background-color: #233D4D;
+}
+
+#sign > div {
+  margin: 0 .5rem;
+}
