@@ -1,18 +1,14 @@
 package com.hannahj.springBoard.web;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hannahj.springBoard.domain.Board;
 import com.hannahj.springBoard.domain.BoardItem;
 import com.hannahj.springBoard.repository.BoardItemRepository;
-import com.hannahj.springBoard.repository.BoardItemSpecs;
 import com.hannahj.springBoard.repository.BoardRepository;
 
 @Controller
@@ -35,9 +30,6 @@ public class BoardItemController {
 	private BoardItemRepository postRepo;
 	@Autowired
 	private BoardRepository boardRepo;
-	
-//	@Autowired
-//	private BoardItemService boardItemSvc;
 	
 	@RequestMapping(value="/list")
 	@ResponseBody
@@ -65,6 +57,7 @@ public class BoardItemController {
         model.addAttribute("post", post);
         model.addAttribute("comments", comments);
         model.addAttribute("boards", boards);
+        model.addAttribute("title", "게시글");
         return "/post";
     }
    

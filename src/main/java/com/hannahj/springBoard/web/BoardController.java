@@ -48,7 +48,7 @@ public class BoardController {
         model.addAttribute("startBlockPage", criteria.getStartBlockPage());
         model.addAttribute("endBlockPage", criteria.getEndBlockPage());
         model.addAttribute("boardPage", boardPage);
-
+        model.addAttribute("title", "Main");
         return "/index";
     }
 
@@ -68,6 +68,7 @@ public class BoardController {
         model.addAttribute("endBlockPage", criteria.getEndBlockPage());
         model.addAttribute("page", postPage);
         model.addAttribute("board", board);
+        model.addAttribute("title", board.getTitle());
         return "/board";
     }
 
@@ -77,6 +78,7 @@ public class BoardController {
         List<Board> boards = boardRepo.findAll();
         model.addAttribute("boards", boards);
         model.addAttribute("id", id);
+        model.addAttribute("title", "글쓰기");
         return "/write";
     }
 
@@ -101,34 +103,13 @@ public class BoardController {
         int end = (start + pageable.getPageSize()) > result.size() ? result.size() :
             (start + pageable.getPageSize());
         Page<BoardItem> pagedResult = new PageImpl<> ((new ArrayList<BoardItem> (result.values())).subList(start,end), pageable, pageable.getPageSize());
-	    model.addAttribute("result", pagedResult);
+	    model.addAttribute("page", pagedResult);
 	    model.addAttribute("keyword",keywords);
 	    
 	    Criteria criteria = new Criteria(pagedResult);
         model.addAttribute("startBlockPage", criteria.getStartBlockPage());
         model.addAttribute("endBlockPage", criteria.getEndBlockPage());
-	    
-        return "/search";
-	    
+        model.addAttribute("title", "검색 결과");	    
+        return "/search";	    
 	}
-
-//    @GetMapping(value = "/search")
-//    @ResponseBody
-//    public Optional<Page<BoardItem>> search(
-//            @RequestParam(value = "keywords") String keywords,
-//            @PageableDefault(sort = { "id" }, direction = Direction.DESC) Pageable pageable, 
-//            Model model) {
-//        Map<String, Object> filter = new HashMap<String, Object>();
-//        String[] searches = keywords.split(" ");
-//        for(String search: searches) {
-//            filter.put("title", "%" + search + "%");
-//            filter.put("content", "%" + search + "%");
-//        }
-//
-//        Page<BoardItem> page = postRepo.findAllPostsWithTitleAndContentLike(keywords, pageable);
-//        return Optional.of(page);
-//    }
-	
-	
-
 }

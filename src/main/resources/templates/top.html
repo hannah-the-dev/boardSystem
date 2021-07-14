@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <link th:href="@{/top.css}" rel="stylesheet" type="text/css">
   <link th:href="@{/post.css}" rel="stylesheet" type="text/css">
+  <title th:text="|Herstories::${title}|"></title>
 </head>
 <body>
   <div th:fragment="topnav" id="header" style="display: flex">
     <div id="logo" th:onClick="location.href='/'"
       style="font-family: 'Fredericka the Great', cursive;"
     >Herstories</div>
-    <!--     <div onClick="location.href='/springBoard/'">Home</div> -->
     <div class="search">
       <form>
         <div id="searchbox">
