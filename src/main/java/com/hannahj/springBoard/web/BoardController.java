@@ -53,8 +53,9 @@ public class BoardController {
         model.addAttribute("title", "Main");
 
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        System.out.println(httpSession.toString());
         if(user != null) {
-            model.addAttribute(user);
+            model.addAttribute("user", user);
         }
         
         return "/index";
@@ -126,7 +127,7 @@ public class BoardController {
 	    
 	    SessionUser user = (SessionUser) httpSession.getAttribute("user");
         if(user != null) {
-            model.addAttribute(user);
+            model.addAttribute("user", user);
         }
         return "join";
 	    
