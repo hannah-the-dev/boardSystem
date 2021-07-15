@@ -1,40 +1,34 @@
 @charset "UTF-8";
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap');
 
-/* https://coolors.co/233d4d-994636-cdcdcd-e6ebe0 */
-
 html {
   margin: 0;
   padding: 0;
 }
 
-
-.h1 {
-/*   position: absolute; */
-  top: 10%;
+h1 {
+  top: 15%;
   left: 10%;
-
 }
 
 .top {
-margin: 0;
-padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 
 .title {
-    margin: 3rem 2rem 0;
+  margin: 3.8rem 2rem 0;
 }
 
 .main {
-   padding: 0 0 0 10%;
+  padding: 0 0 0 5%;
 }
 
 body:not(.logo) {
   color: rgb(35, 30, 35);
   font-family: 'Noto Sans KR', sans-serif;
 }
-
 
 tr, td, th {
   border: 1px solid rgb(52, 58, 64);
@@ -53,6 +47,10 @@ table, h3 {
   border-collapse: collapse;
   margin: 10px 0 10px;
   width: 800px;
+}
+
+table {
+  width: 100%;
 }
 
 .numbers {
@@ -90,13 +88,11 @@ tr.post:hover,
   cursor: pointer;
 }
    
-
-/* https://coolors.co/233d4d-994636-cdcdcd-e6ebe0 */
-   
 :root {
   --button-color: #cdcdcd;
-  --button-bg-color: #b15e6c;
-  --button-hover-bg-color: #7d5c65;
+  --button-bg-color: #8863D0;
+  --button-hover-bg-color: #EA1889;
+  --button-text-color: #FCC5E2;
 }
 
 button,
@@ -126,28 +122,21 @@ input[type='submit']:not([id='searchbutton']) {
   cursor: pointer;
   	 
   transition: 0.5s;
-/*   --button-color: #373f47; */
-/*   --button-bg-color: #6096ba; */
-/*   --button-hover-bg-color: #ed6a5a; */
 }
 
 .button:not([disabled]), button {
-  background: #b15e6c;
-  color: #cdcdcd;
-}
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
+  }
 
-/* .button[disabled] { */
-/*     color: -internal-light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3)); */
-/*     background-color: -internal-light-dark(rgba(239, 239, 239, 0.3), rgba(19, 1, 1, 0.3)); */
-/*     border-color: -internal-light-dark(rgba(118, 118, 118, 0.3), rgba(195, 195, 195, 0.3)); */
-/* } */
-
-
+.button:not([disabled]):hover, 
+button:hover {
+    background-color: var(--button-hover-bg-color);
+  }
 
 textarea {
   height: 10em;
 }
-  
 
 ul {
   list-style: none;
@@ -158,7 +147,6 @@ li {
   float: left;
   margin: 1em 1em 1em 1em;
 }
-
 
 /* 페이지처리 */
 .text-xs-center {

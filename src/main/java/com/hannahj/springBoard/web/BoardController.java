@@ -112,4 +112,10 @@ public class BoardController {
         model.addAttribute("title", "검색 결과");	    
         return "/search";	    
 	}
+	
+	@GetMapping("/join") 
+    public String join() {
+        return "join";
+	    
+	}
 }

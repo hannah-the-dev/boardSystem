@@ -4,26 +4,28 @@
   <meta charset="UTF-8">
   <link th:href="@{/top.css}" rel="stylesheet" type="text/css">
   <link th:href="@{/post.css}" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
   <title th:text="|Herstories::${title}|"></title>
 </head>
 <body>
   <div th:fragment="topnav" id="header" style="display: flex">
-    <div id="logo" th:onClick="location.href='/'"
-      style="font-family: 'Fredericka the Great', cursive;"
-    >Herstories</div>
+    <div><i class="fas fa-bars"></i>
+    </div>
+    <div id="logo-container" th:onClick="location.href='/'"
+      ><img src="/images/logo-straight.png" id="logo"></div>
     <div class="search">
-      <form>
+      <form action="search">
         <div id="searchbox">
           <input type="text" name="keywords" placeholder="여기에서 검색하세요" style="width: 80%" required>
         </div>
-        <div id="searchbutton">
-          <input type="submit" class="headerbutton" formaction="search" value="검색">
-        </div>
+<!--         <div id="searchbutton"> -->
+<!--           <input type="submit" class="headerbutton" formaction="search" value="검색"> -->
+<!--         </div> -->
       </form>
     </div>
     <div id='sign'>
       <div th:onClick="'location.href=\''+@{''}+'\''">로그인</div>
-      <div th:onClick="'location.href=\''+@{''}+'\''">회원가입</div>
+      <div th:onClick="'location.href=\''+@{/join}+'\''">회원가입</div>
     </div>
   </div>
 </body>

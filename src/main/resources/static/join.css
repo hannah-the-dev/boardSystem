@@ -1,0 +1,12 @@
+@charset "UTF-8";
+
+#google-join > div {
+  display: inline-block;
+  margin: 10px 15px;
+}
+
+#google-join {
+  display: flex;
+  flex-flow: row;
+  align-items: center; 
+}

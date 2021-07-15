@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/top::head"></head>
+<head>
+  <meta name="google-signin-scope" content="profile email">
+  <meta name="google-signin-client_id"
+  content="356218036405-gqt7pd6e5epbo4sr8f387vqf7dpl2v3t.apps.googleusercontent.com"
+>
+  <link th:href="@{/join.css}" rel="stylesheet" type="text/css">
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+  <nav class="top" th:insert="/top::topnav"></nav>
+  <div class="main">
+    <div class="title">
+      <h1>회원가입</h1>
+    </div>
+    <div id="google-join">
+      <div id="text"><span>구글로 시작하기</span></div>
+      <div class="g-signin2" data-onsuccess="onSignIn" data-theme="light"></div>
+    </div>
+    <div>
+      <form>
+        <table>
+          <tr>
+            <th>email</th>
+            <td></td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+  <script>
+      function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+      };
+    </script>
+
+</body>
+</html>

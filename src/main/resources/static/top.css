@@ -6,20 +6,26 @@
   margin: 0;
 }
 
-.logo {
-  font-family: 'Fredericka the Great', cursive;
-  position: fixed;
-  color: #cdcdcd;
+#logo-container {
+/*   position: fixed; */
   left: 5px;
-  font-size: 1.3em;
+  padding: 0;
+  align-content: center;
+  line-height:40px;
+  margin-right: auto;
 }
 
-#header, .search {
+#logo {
+  height: 30px;
+  vertical-align:middle;
+}
+
+#header{
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   align-items: center;
 }
-#header div:not(.search) {
+#header div:not(.search):not(#logo-container) {
   display: inline-block;
 }
 
@@ -29,7 +35,7 @@
 
 #header {
   background-color: #233d4d;
-  color: #CDCDCD;
+  color: #63FFBF;
   position: fixed;
   width: 100%;
   top: 0;
