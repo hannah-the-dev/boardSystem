@@ -1,36 +1,36 @@
 package com.hannahj.springBoard.web;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hannahj.springBoard.config.auth.dto.SessionUser;
 import com.hannahj.springBoard.domain.Board;
 import com.hannahj.springBoard.domain.BoardItem;
 import com.hannahj.springBoard.paging.Criteria;
 import com.hannahj.springBoard.repository.BoardItemRepository;
-import com.hannahj.springBoard.repository.BoardItemSpecs;
 import com.hannahj.springBoard.repository.BoardRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Controller
 public class BoardController {
 
@@ -38,6 +38,8 @@ public class BoardController {
     private BoardRepository boardRepo;
     @Autowired
     private BoardItemRepository postRepo;
+    //Since http session has only constructor, @RequiredArgsConstructor construct automatically
+    final HttpSession httpSession;
 
     @GetMapping({ "/index", "/" })
     public String boardList(@PageableDefault(sort = { "id" }, direction = Direction.DESC) Pageable pageable,
@@ -49,6 +51,12 @@ public class BoardController {
         model.addAttribute("endBlockPage", criteria.getEndBlockPage());
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("title", "Main");
+
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        if(user != null) {
+            model.addAttribute(user);
+        }
+        
         return "/index";
     }
 
@@ -114,7 +122,12 @@ public class BoardController {
 	}
 	
 	@GetMapping("/join") 
-    public String join() {
+    public String join(Model model) {
+	    
+	    SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        if(user != null) {
+            model.addAttribute(user);
+        }
         return "join";
 	    
 	}

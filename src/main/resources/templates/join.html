@@ -20,6 +20,9 @@
       <div id="text"><span>구글로 시작하기</span></div>
       <div class="g-signin2" data-onsuccess="onSignIn" data-theme="light"></div>
     </div>
+    <div id="google-in">
+      <div class="g-signout" data-theme="light" onclick="signOut();">Sign Out</div>
+    </div>
     <div>
       <form>
         <table>
@@ -46,6 +49,14 @@
         var id_token = googleUser.getAuthResponse().id_token;
         console.log("ID Token: " + id_token);
       };
+      function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+          console.log('User signed out.');
+        });
+//         activate when user can't logout
+        auth2.disconnect();
+      }
     </script>
 
 </body>
