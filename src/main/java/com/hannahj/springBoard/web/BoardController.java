@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hannahj.springBoard.config.auth.dto.SessionUser;
 import com.hannahj.springBoard.domain.Board;
-import com.hannahj.springBoard.domain.BoardItem;
+import com.hannahj.springBoard.domain.Post;
 import com.hannahj.springBoard.paging.Criteria;
-import com.hannahj.springBoard.repository.BoardItemRepository;
+import com.hannahj.springBoard.repository.PostRepository;
 import com.hannahj.springBoard.repository.BoardRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -37,30 +37,11 @@ public class BoardController {
     @Autowired
     private BoardRepository boardRepo;
     @Autowired
-    private BoardItemRepository postRepo;
+    private PostRepository postRepo;
     //Since http session has only constructor, @RequiredArgsConstructor construct automatically
-    final HttpSession httpSession;
-
-    @GetMapping({ "/index", "/" })
-    public String boardList(@PageableDefault(sort = { "id" }, direction = Direction.DESC) Pageable pageable,
-            Model model) {
-
-        Page<Board> boardPage = boardRepo.findAll(pageable);
-        Criteria criteria = new Criteria(boardPage);
-        model.addAttribute("startBlockPage", criteria.getStartBlockPage());
-        model.addAttribute("endBlockPage", criteria.getEndBlockPage());
-        model.addAttribute("boardPage", boardPage);
-        model.addAttribute("title", "Main");
-
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
-        System.out.println(httpSession.toString());
-        if(user != null) {
-            model.addAttribute("user", user);
-        }
-        
-        return "/index";
-    }
-
+    
+    private HttpSession httpSession;
+    
     @GetMapping({ "/board" })
     public String postList(@RequestParam(value = "id", defaultValue = "1") Long id,
             @PageableDefault(sort = { "id" }, direction = Direction.DESC) Pageable pageable, Model model) {
@@ -71,7 +52,7 @@ public class BoardController {
         } else {
             board = boardOptional.get();
         }
-        Page<BoardItem> postPage = postRepo.findAllByBoardAndParentIdIsNull(board, pageable);
+        Page<Post> postPage = postRepo.findAllByBoardAndParentIdIsNull(board, pageable);
         Criteria criteria = new Criteria(postPage);
         model.addAttribute("startBlockPage", criteria.getStartBlockPage());
         model.addAttribute("endBlockPage", criteria.getEndBlockPage());
@@ -96,22 +77,22 @@ public class BoardController {
 	         @RequestParam(value="keywords") String keywords,
 	         @PageableDefault(sort = { "id" }, direction = Direction.DESC) Pageable pageable,
 	         Model model) {
-//	    BoardItemSpecs postSpecs = new BoardItemSpecs();
-//	    String expression = BoardItemSpecs.getExpression(keywords);
+//	    PostSpecs postSpecs = new PostSpecs();
+//	    String expression = PostSpecs.getExpression(keywords);
         System.out.println(pageable.toString());
-//	        Page<BoardItem> found = postRepo.findAllPostsWithTitleAndContentLike(expression, pageable);
+//	        Page<Post> found = postRepo.findAllPostsWithTitleAndContentLike(expression, pageable);
         String[] words = keywords.split(" ");
-        Map<Long, BoardItem> result = new LinkedHashMap<>();
+        Map<Long, Post> result = new LinkedHashMap<>();
         for(String word : words) {
-            List<BoardItem> posts = postRepo.findByParentIdIsNullAndTitleLikeIgnoreCaseOrParentIdIsNullAndContentLikeIgnoreCase('%'+word+'%','%'+word+'%');
-            for (BoardItem post: posts) {
+            List<Post> posts = postRepo.findByParentIdIsNullAndTitleLikeIgnoreCaseOrParentIdIsNullAndContentLikeIgnoreCase('%'+word+'%','%'+word+'%');
+            for (Post post: posts) {
                 result.put(post.getId(), post);
             }
         }
         int start = (int) pageable.getOffset();
         int end = (start + pageable.getPageSize()) > result.size() ? result.size() :
             (start + pageable.getPageSize());
-        Page<BoardItem> pagedResult = new PageImpl<> ((new ArrayList<BoardItem> (result.values())).subList(start,end), pageable, pageable.getPageSize());
+        Page<Post> pagedResult = new PageImpl<> ((new ArrayList<Post> (result.values())).subList(start,end), pageable, pageable.getPageSize());
 	    model.addAttribute("page", pagedResult);
 	    model.addAttribute("keyword",keywords);
 	    

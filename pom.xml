@@ -13,7 +13,7 @@
   <groupId>com.hannahj.springBoard</groupId>
   <artifactId>springBoard</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
   <name>springBoard</name>
   <description>Demo project for Spring Boot</description>
   <properties>

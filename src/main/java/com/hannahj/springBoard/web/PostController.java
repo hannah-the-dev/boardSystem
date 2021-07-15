@@ -18,22 +18,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hannahj.springBoard.domain.Board;
-import com.hannahj.springBoard.domain.BoardItem;
-import com.hannahj.springBoard.repository.BoardItemRepository;
+import com.hannahj.springBoard.domain.Post;
+import com.hannahj.springBoard.repository.PostRepository;
 import com.hannahj.springBoard.repository.BoardRepository;
 
 @Controller
 @RequestMapping(value="/post")
-public class BoardItemController {
+public class PostController {
 	
 	@Autowired
-	private BoardItemRepository postRepo;
+	private PostRepository postRepo;
 	@Autowired
 	private BoardRepository boardRepo;
 	
 	@RequestMapping(value="/list")
 	@ResponseBody
-	public Optional<List<BoardItem>> findAll() {
+	public Optional<List<Post>> findAll() {
 		return Optional.of(postRepo.findAll());
 		
 	}
@@ -45,14 +45,14 @@ public class BoardItemController {
             Model model) {
         if (!postRepo.existsById(id)) {
         }
-        Optional<BoardItem> postOptional = postRepo.findById(id);
-        BoardItem post = BoardItem.builder().build();
+        Optional<Post> postOptional = postRepo.findById(id);
+        Post post = Post.builder().build();
         if (!postOptional.isPresent()) {
         } else {
             post = postOptional.get();
         }
         List<Board> boards = boardRepo.findAll();
-        Page<BoardItem> comments =postRepo.findByParentId(id, pageable);
+        Page<Post> comments =postRepo.findByParentId(id, pageable);
         
         model.addAttribute("post", post);
         model.addAttribute("comments", comments);
@@ -63,27 +63,27 @@ public class BoardItemController {
    
    @PostMapping("/edit")
    public String edit(
-           @ModelAttribute BoardItem boardItem) {
-       Optional<BoardItem> post = postRepo.findById(boardItem.getId());
+           @ModelAttribute Post post) {
+       Optional<Post> postOpt = postRepo.findById(post.getId());
        StringBuffer buff = new StringBuffer();
        
-       post.ifPresentOrElse(selected ->{
-           selected.setBoard(boardItem.getBoard());
-           selected.setTitle(boardItem.getTitle());
-           selected.setUsername(boardItem.getUsername());
-           selected.setParentId(boardItem.getParentId());
-           selected.setContent(boardItem.getContent());
+       postOpt.ifPresentOrElse(selected ->{
+           selected.setBoard(post.getBoard());
+           selected.setTitle(post.getTitle());
+           selected.setUsername(post.getUsername());
+           selected.setParentId(post.getParentId());
+           selected.setContent(post.getContent());
            
-           BoardItem edited = postRepo.save(selected);
+           Post edited = postRepo.save(selected);
            if(edited.getParentId() == null) {
                buff.append("redirect:/post/"+edited.getId()); 
            } else {
                buff.append("redirect:/post/"+edited.getParentId());
            }
        }, () -> {
-           String add = (boardItem.getParentId()==null)? 
-                   "redirect:/post/"+boardItem.getId() : 
-                       "redirect:/post/"+boardItem.getParentId();
+           String add = (post.getParentId()==null)? 
+                   "redirect:/post/"+post.getId() : 
+                       "redirect:/post/"+post.getParentId();
            buff.append(add);
            }
        );
@@ -92,30 +92,30 @@ public class BoardItemController {
    
    @PostMapping("/delete")
    public String delete(
-           @ModelAttribute BoardItem boardItem) {
-       Optional<BoardItem> post = postRepo.findById(boardItem.getId());
+           @ModelAttribute Post post) {
+       Optional<Post> postOpt = postRepo.findById(post.getId());
        StringBuffer buff = new StringBuffer();
        
-       post.ifPresentOrElse(selected ->{
-           selected.setId(boardItem.getId());
-           selected.setBoard(boardItem.getBoard());
-           selected.setTitle(boardItem.getTitle());
-           selected.setUsername(boardItem.getUsername());
-           selected.setParentId(boardItem.getParentId());
-           selected.setContent(boardItem.getContent());
+       postOpt.ifPresentOrElse(selected ->{
+           selected.setId(post.getId());
+           selected.setBoard(post.getBoard());
+           selected.setTitle(post.getTitle());
+           selected.setUsername(post.getUsername());
+           selected.setParentId(post.getParentId());
+           selected.setContent(post.getContent());
            
-//           postRepo.deleteById(boardItem.getId());
+//           postRepo.deleteById(post.getId());
            
            postRepo.delete(selected);
-           if(boardItem.getParentId() == null) {
-               buff.append("redirect:/post/"+boardItem.getId()); 
+           if(post.getParentId() == null) {
+               buff.append("redirect:/post/"+post.getId()); 
            } else {
-               buff.append("redirect:/post/"+boardItem.getParentId());
+               buff.append("redirect:/post/"+post.getParentId());
            }
        }, () -> {
-           String add = (boardItem.getParentId()==null)? 
-                   "redirect:/post/"+boardItem.getId() : 
-                       "redirect:/post/"+boardItem.getParentId();
+           String add = (post.getParentId()==null)? 
+                   "redirect:/post/"+post.getId() : 
+                       "redirect:/post/"+post.getParentId();
            buff.append(add);
        }
                );
@@ -125,8 +125,8 @@ public class BoardItemController {
    
    @PostMapping("/writer")
    public String writer(
-           @ModelAttribute BoardItem boardItem) {
-       BoardItem saved = postRepo.save(boardItem);
+           @ModelAttribute Post post) {
+       Post saved = postRepo.save(post);
        
        if(saved.getParentId() == null) {
            String add = "redirect:/post/"+saved.getId(); 

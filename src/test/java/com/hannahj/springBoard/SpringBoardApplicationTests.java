@@ -26,8 +26,8 @@ import static org.springframework.test.web.servlet.MockMvc.*;
 import static org.springframework.util.LinkedMultiValueMap.*;
 import static org.springframework.util.MultiValueMap.*;
 import com.hannahj.springBoard.domain.Board;
-import com.hannahj.springBoard.domain.BoardItem;
-import com.hannahj.springBoard.repository.BoardItemRepository;
+import com.hannahj.springBoard.domain.Post;
+import com.hannahj.springBoard.repository.PostRepository;
 import com.hannahj.springBoard.repository.BoardRepository;
 import com.hannahj.springBoard.web.BoardController;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -43,7 +43,7 @@ class SpringBoardApplicationTests {
     @Autowired
     private BoardRepository boardRepo;
     @Autowired
-    private BoardItemRepository boardItemRepo;
+    private PostRepository postRepo;
     
     @Autowired
     private  MockMvc mockMvc;
@@ -61,13 +61,13 @@ class SpringBoardApplicationTests {
 	            .title("공지게시판")
 	            .build();
 
-	    BoardItem boardItem1 = BoardItem.builder()
+	    Post post1 = Post.builder()
 	            .board(board)
 	            .title("첫번째 공지")
 	            .username("관리자1")
 	            .content("게시판을 개설했습니다.")
 	            .build();
-	    BoardItem boardItem2 = BoardItem.builder()
+	    Post post2 = Post.builder()
 	            .board(board)
 	            .title("두번째 공지")
                 .username("관리자1")
@@ -75,19 +75,19 @@ class SpringBoardApplicationTests {
 	            .build();
 	    
 	    
-	    List<BoardItem> list = new ArrayList<>();
-	    list.add(boardItem1);
-	    list.add(boardItem2);
+	    List<Post> list = new ArrayList<>();
+	    list.add(post1);
+	    list.add(post2);
 	    
-	    board.setBoardItems(list);
+	    board.setPosts(list);
 	    boardRepo.save(board);
 //	    return board.getId();
 	}
 	
 //	@Test
-    void getBoardItems() {
-	    List<BoardItem> posts = boardItemRepo.findAll();
-	    for (BoardItem  post: posts) {
+    void getPosts() {
+	    List<Post> posts = postRepo.findAll();
+	    for (Post  post: posts) {
 	        System.out.println("->");
 //	        System.out.println(post.getId());
 	        System.out.println(post.getTitle());
@@ -102,14 +102,14 @@ class SpringBoardApplicationTests {
 	        return;
 	    } else {
 	        Board board = boardOptional.get();
-//	        Hibernate.initialize(board.getBoardItems());
+//	        Hibernate.initialize(board.getPosts());
 	        for (int i = 0; i < 20; i++) {
                 
-	            BoardItem boardItem = BoardItem.builder()
+	            Post post = Post.builder()
 	                    .board(board)
 	                    .title("TestInsertPostOnly")
 	                    .build();
-	            boardItemRepo.save(boardItem);
+	            postRepo.save(post);
             }
 	    }
     }
@@ -126,12 +126,12 @@ class SpringBoardApplicationTests {
 	            return;
 	        } else {
 	            board = boardOptional.get();
-	            Hibernate.initialize(board.getBoardItems());
+	            Hibernate.initialize(board.getPosts());
 	            board.getTitle();
-	            board.getBoardItems();
+	            board.getPosts();
 	            boardRepo.deleteById(id);
 	        }
-	        List<BoardItem> deleted = boardItemRepo.findByBoard(board);
+	        List<Post> deleted = postRepo.findByBoard(board);
 	        assertEquals(0, deleted.size());
 	    }
 	}
@@ -140,7 +140,7 @@ class SpringBoardApplicationTests {
 	void findByID() {
 	    Optional<Board> boardOptional = boardRepo.findById(3L);
 	    Board board = boardOptional.get();
-	    List<BoardItem> posts = board.getBoardItems();
+	    List<Post> posts = board.getPosts();
 
 	}
 //	@Test
@@ -149,9 +149,9 @@ class SpringBoardApplicationTests {
 //	    LocalDateTime now = LocalDateTime.now();
 	    Optional<Board> boardOptional = boardRepo.findById(3L);
 	    Board board = boardOptional.get();
-	    Hibernate.initialize(board.getBoardItems());
-	    List<BoardItem> boardItems = board.getBoardItems();
-	    assertNotNull(boardItems);
+	    Hibernate.initialize(board.getPosts());
+	    List<Post> posts = board.getPosts();
+	    assertNotNull(posts);
 	}
 	
 	

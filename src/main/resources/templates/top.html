@@ -18,17 +18,18 @@
         <div id="searchbox">
           <input type="text" name="keywords" placeholder="여기에서 검색하세요" style="width: 80%" required>
         </div>
-<!--         <div id="searchbutton"> -->
-<!--           <input type="submit" class="headerbutton" formaction="search" value="검색"> -->
-<!--         </div> -->
+        <div id="searchbutton">
+          <input type="submit" class="headerbutton" formaction="search" value="검색">
+        </div>
       </form>
     </div>
-    <div id='sign'>
-      <div th:if='${user == null}' onClick="location.href='/oauth2/authorization/google'">로그인</div>
-      <div th:if='${user != null}' th:onClick="'location.href=\''+@{/userinfo}+'\''" th:text="${user.name}"></div>
-      
-      <div th:if='${user == null}' th:onClick="'location.href=\''+@{/join}+'\''">회원가입</div>
-      <div th:if='${user != null}' th:onClick="signOut();">로그아웃</div>
+    <div th:if='${user == null}' id='non-memeber'>
+      <div onClick="location.href='/oauth2/authorization/google'">로그인</div>
+      <div th:onClick="'location.href=\''+@{/join}+'\''">회원가입</div>
+    </div>
+    <div th:unless='${user == null}' id='memeber'>
+      <div th:onClick="'location.href=\''+@{/userinfo}+'\''" th:text="${user.name}"></div>
+      <div th:onClick="signOut();">로그아웃</div>
     </div>
   </div>
     <script>

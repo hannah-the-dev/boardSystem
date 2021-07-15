@@ -16,10 +16,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter 
+@Getter @Setter
 @Builder @NoArgsConstructor @AllArgsConstructor
 @Entity
-public class BoardItem extends BaseTimeEntity {
+public class Post extends BaseTimeEntity {
 	
     @ManyToOne(optional=false)
     @JoinColumn(name="board_id")
@@ -39,9 +39,11 @@ public class BoardItem extends BaseTimeEntity {
 	private String content;
 	@Column
 	private Long parentId;
-
 	
-//	private List<BoardItem> comment;
+	@Column
+	private Integer hit;
+	
+//	private List<Post> comment;
 	
 	@Formula("(select count(1) from board_item as bc where bc.parent_id = id)")
 	private Long commentSize;

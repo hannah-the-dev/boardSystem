@@ -11,13 +11,13 @@
   left: 5px;
   padding: 0;
   align-content: center;
-  line-height:40px;
+  line-height: 40px;
   margin-right: auto;
 }
 
 #logo {
   height: 30px;
-  vertical-align:middle;
+  vertical-align: middle;
 }
 
 #header{
@@ -58,6 +58,3 @@
   background-color: #233D4D;
 }
 
-#sign > div {
-  margin: 0 .5rem;
-}

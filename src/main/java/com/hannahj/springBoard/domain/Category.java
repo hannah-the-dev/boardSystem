@@ -9,8 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
@@ -23,24 +21,18 @@ import lombok.Singular;
 @Getter
 @Builder @NoArgsConstructor @AllArgsConstructor
 @Entity
-public class Board {
-    
+public class Category {
     @Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
-	private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private Long id;
 
-	@Column
-	@Setter 
-	private String title;
-	
-	@ManyToOne(optional=false)
-	@JoinColumn(name="catetgory_id")
-	private Category category;
-	
-	@Singular
-	@Setter
-	@OneToMany(mappedBy="board", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	private List<Post> posts;
+    @Column
+    @Setter 
+    private String title;
+    
+    @Singular
+    @Setter 
+    @OneToMany(mappedBy="category", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+    private List<Board> boards;
 }
-

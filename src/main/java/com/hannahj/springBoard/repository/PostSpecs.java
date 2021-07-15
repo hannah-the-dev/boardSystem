@@ -13,10 +13,10 @@ import javax.persistence.criteria.Root;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.hannahj.springBoard.domain.BoardItem;
+import com.hannahj.springBoard.domain.Post;
 
-public class BoardItemSpecs {
-	public static Specification<BoardItem> search(Map<String, Object> filter){
+public class PostSpecs {
+	public static Specification<Post> search(Map<String, Object> filter){
 		return (root, query, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 			filter.forEach((key, value) -> {
@@ -28,7 +28,7 @@ public class BoardItemSpecs {
 			return builder.and(predicates.toArray(new Predicate[0]));
 		};
 	}
-	public static Specification<BoardItem> searchByTitleAndContent(Map<String, Object> filter){
+	public static Specification<Post> searchByTitleAndContent(Map<String, Object> filter){
 	    return (root, query, builder) -> {
 	        List<Predicate> predicates = new ArrayList<>();
 	        filter.forEach((key, value) -> {
@@ -54,8 +54,8 @@ public class BoardItemSpecs {
 //        EntityManager entityManager = null;
 //        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 //        
-//        CriteriaQuery<BoardItem> criteriaQuery = criteriaBuilder.createQuery(BoardItem.class);
-//        Root<BoardItem> itemRoot = criteriaQuery.from(BoardItem.class);
+//        CriteriaQuery<Post> criteriaQuery = criteriaBuilder.createQuery(Post.class);
+//        Root<Post> itemRoot = criteriaQuery.from(Post.class);
 //        Predicate predicateForTitleLike = null;
 //        Predicate predicateForContentLike = null;
 //        for (String search : searches) {
@@ -74,7 +74,7 @@ public class BoardItemSpecs {
 //          = criteriaBuilder
 //          .or(predicateForTitleAndContentLike, predicateForPidNull);
 //        criteriaQuery.where(finalPredicate);
-//        List<BoardItem> items = entityManager.createQuery(criteriaQuery).getResultList();
+//        List<Post> items = entityManager.createQuery(criteriaQuery).getResultList();
 //        return finalPredicate;
 //    }
 }
