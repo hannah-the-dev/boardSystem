@@ -21,14 +21,8 @@ public class Criteria {
     /** 현재 페이지 번호 */
     private int pageNumber;
 
-    /** 검색 키워드 */
-    private String searchKeyword;
-
-    /** 검색 유형 */
-    private String searchType;
-    
     private int totalPages;
-
+    
     @Getter
     private int startBlockPage;
     

@@ -45,4 +45,5 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
 	List<Post> findByParentIdIsNullAndTitleLikeIgnoreCaseOrParentIdIsNullAndContentLikeIgnoreCase(String expression, String expression1);
 	
     Page<Post> findByParentId(Specification<Post> search, Pageable pageable);
+    
 }

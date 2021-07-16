@@ -1,20 +1,15 @@
 package com.hannahj.springBoard.web;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -25,8 +20,8 @@ import com.hannahj.springBoard.config.auth.dto.SessionUser;
 import com.hannahj.springBoard.domain.Board;
 import com.hannahj.springBoard.domain.Post;
 import com.hannahj.springBoard.paging.Criteria;
-import com.hannahj.springBoard.repository.PostRepository;
 import com.hannahj.springBoard.repository.BoardRepository;
+import com.hannahj.springBoard.repository.PostRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -71,46 +66,4 @@ public class BoardController {
         model.addAttribute("title", "글쓰기");
         return "/write";
     }
-
-	@GetMapping({"/search", "/post/search"})
-	 public String search(
-	         @RequestParam(value="keywords") String keywords,
-	         @PageableDefault(sort = { "id" }, direction = Direction.DESC) Pageable pageable,
-	         Model model) {
-//	    PostSpecs postSpecs = new PostSpecs();
-//	    String expression = PostSpecs.getExpression(keywords);
-        System.out.println(pageable.toString());
-//	        Page<Post> found = postRepo.findAllPostsWithTitleAndContentLike(expression, pageable);
-        String[] words = keywords.split(" ");
-        Map<Long, Post> result = new LinkedHashMap<>();
-        for(String word : words) {
-            List<Post> posts = postRepo.findByParentIdIsNullAndTitleLikeIgnoreCaseOrParentIdIsNullAndContentLikeIgnoreCase('%'+word+'%','%'+word+'%');
-            for (Post post: posts) {
-                result.put(post.getId(), post);
-            }
-        }
-        int start = (int) pageable.getOffset();
-        int end = (start + pageable.getPageSize()) > result.size() ? result.size() :
-            (start + pageable.getPageSize());
-        Page<Post> pagedResult = new PageImpl<> ((new ArrayList<Post> (result.values())).subList(start,end), pageable, pageable.getPageSize());
-	    model.addAttribute("page", pagedResult);
-	    model.addAttribute("keyword",keywords);
-	    
-	    Criteria criteria = new Criteria(pagedResult);
-        model.addAttribute("startBlockPage", criteria.getStartBlockPage());
-        model.addAttribute("endBlockPage", criteria.getEndBlockPage());
-        model.addAttribute("title", "검색 결과");	    
-        return "/search";	    
-	}
-	
-	@GetMapping("/join") 
-    public String join(Model model) {
-	    
-	    SessionUser user = (SessionUser) httpSession.getAttribute("user");
-        if(user != null) {
-            model.addAttribute("user", user);
-        }
-        return "join";
-	    
-	}
 }

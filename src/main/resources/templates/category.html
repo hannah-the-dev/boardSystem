@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/top::head">
+</head>
+<body>
+  <nav class="top" th:insert="/top::topnav"></nav>
+  <div class="main">
+  <div class="title"><h1>게시판 모음</h1></div>
+  <table>
+    <tr>
+      <th style="width: 20%">게시판 번호</th>
+      <th style="width: 80%">게시판 이름</th>
+    </tr>
+    <tr th:each='board: ${boardPage.content}' class="post" 
+    th:onClick="'location.href=\''+@{/board(id=${board.id})}+'\''">
+        <td>
+          <div class="numbers" th:text=${board.id}></div>
+        </td>
+        <td th:text=${board.title}></td>
+      </tr>
+  </table>
+  <!-- 페이징 영역 시작 -->
+  <div class="text-xs-center">
+    <ul class="pagination justify-content-center">
+<!--       이전 -->
+      <li th:unless="${boardPage.first}" class="page-item"><a class="page-link" th:href="@{''(page=1)}">처음</a></li>
+      <li th:unless="${boardPage.first}" class="page-item"><a class="page-link" th:href="@{''(page=${boardPage.number-1)}">&larr;</a></li>
+<!--       페이지 그룹 -->
+      <li class='page-item' th:each="page: ${#numbers.sequence(startBlockPage, endBlockPage)}"
+      th:classappend="${page == boardPage.number} ? 'disabled'">
+      <a class="page-link" th:href="@{''(page=${page})}" th:text=${page}></a></li>
+<!--       다음 -->
+      <li th:unless="${boardPage.last}" class="page-item"><a class="page-link" th:href="@{''(page=${boardPage.number+2)}">&rarr;</a></li>
+      <li th:unless="${boardPage.last}" class="page-item"><a class="page-link" th:href="@{''(page={boardPage.totalPages})}">끝</a></li>
+    </ul>
+  </div>
+  <!-- 페이징 영역 끝 -->
+</div>
+</body>
+</html>

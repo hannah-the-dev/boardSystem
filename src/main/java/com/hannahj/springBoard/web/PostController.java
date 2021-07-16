@@ -3,6 +3,9 @@ package com.hannahj.springBoard.web;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +13,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hannahj.springBoard.domain.Board;
 import com.hannahj.springBoard.domain.Post;
-import com.hannahj.springBoard.repository.PostRepository;
 import com.hannahj.springBoard.repository.BoardRepository;
+import com.hannahj.springBoard.repository.PostRepository;
 
 @Controller
 @RequestMapping(value="/post")
@@ -42,11 +46,21 @@ public class PostController {
     public String post(
             @PathVariable("id") Long id,
             @PageableDefault(sort = { "id" }, direction = Direction.DESC) Pageable pageable, 
+            @CookieValue(name="view") String cookie,
+            HttpServletResponse response,
             Model model) {
         if (!postRepo.existsById(id)) {
+            return null;
         }
-        Optional<Post> postOptional = postRepo.findById(id);
+        
         Post post = Post.builder().build();
+        if(!(cookie.contains(String.valueOf(id)))) {
+            cookie += id + "/";
+            // 조회수 추가하는 매서드
+        }
+        response.addCookie(new Cookie("view", cookie));
+        
+        Optional<Post> postOptional = postRepo.findById(id);
         if (!postOptional.isPresent()) {
         } else {
             post = postOptional.get();

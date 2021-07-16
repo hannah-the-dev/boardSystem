@@ -41,7 +41,7 @@ public class Post extends BaseTimeEntity {
 	private Long parentId;
 	
 	@Column
-	private Integer hit;
+	private int hit;
 	
 //	private List<Post> comment;
 	
