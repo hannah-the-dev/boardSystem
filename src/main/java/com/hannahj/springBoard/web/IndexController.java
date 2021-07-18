@@ -79,7 +79,6 @@ public class IndexController {
             @RequestParam(value="keywords") String keywords,
             @PageableDefault(sort = { "id" }, direction = Direction.DESC) Pageable pageable,
             Model model) {
-       System.out.println(pageable.toString());
        String[] words = keywords.split(" ");
        Map<Long, Post> result = new LinkedHashMap<>();
        for(String word : words) {

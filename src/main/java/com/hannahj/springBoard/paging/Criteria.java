@@ -31,7 +31,7 @@ public class Criteria {
 
     public Criteria(Page<?> page) {
         this.pageNumber = page.getPageable().getPageNumber();
-        this.totalPages=page.getTotalPages();
+        this.totalPages = page.getTotalPages();
         this.startBlockPage = ((pageNumber)/pageBlock)*pageBlock+1; 
         this.endBlockPage = (int) ((totalPages < startBlockPage+pageBlock-1)?
                 totalPages : startBlockPage+pageBlock-1); 

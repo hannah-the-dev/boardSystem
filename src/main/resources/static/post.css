@@ -35,12 +35,13 @@ tr, td, th {
   padding: 5px 15px 5px 15px;
   border-left: none;
   border-right: none;
-  text-align: center;
+
 }
 
 th {
   background-color: #e3e4db;
   color: #373f47;
+  text-align: center;
 }
 
 table, h3 {

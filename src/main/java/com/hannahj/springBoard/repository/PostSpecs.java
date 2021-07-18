@@ -16,32 +16,52 @@ import org.springframework.data.jpa.domain.Specification;
 import com.hannahj.springBoard.domain.Post;
 
 public class PostSpecs {
-	public static Specification<Post> search(Map<String, Object> filter){
+    public enum SearchKey {
+        TITLE("title"),
+        CONTENT("content"),
+        WRITER("username"),
+        HIT("hit");
+
+        private final String value;
+
+        SearchKey(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+    
+	public static Specification<Post> search(Map<SearchKey, Object> filter){
 		return (root, query, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 			filter.forEach((key, value) -> {
 				switch (key) {
-				case "title":
-					predicates.add(builder.equal(root.get(key).as(String.class), value));
+				case TITLE:
+				case CONTENT:
+				case WRITER:
+					predicates.add(
+					        builder.equal(
+					                root.get(key.value), 
+					                filter.get(key)
+					                )
+					        );
+					break;
+				case HIT:
+				    predicates.add(
+				            builder.greaterThanOrEqualTo(
+				                    root.get(key.value), 
+				                    Integer.valueOf(filter.get(key).toString())
+				                    )
+				            );
+				    break;
 				}
 			});
 			return builder.and(predicates.toArray(new Predicate[0]));
 		};
 	}
-	public static Specification<Post> searchByTitleAndContent(Map<String, Object> filter){
-	    return (root, query, builder) -> {
-	        List<Predicate> predicates = new ArrayList<>();
-	        filter.forEach((key, value) -> {
-	            switch (key) {
-	            case "title":
-	            case "content":
-	                predicates.add(builder.equal(root.get(key).as(String.class), value));
-	            }
-	        });
-	        return builder.and(predicates.toArray(new Predicate[0]));
-	    };
-	}
-	
+
 	//service로 돌림
     public static String getExpression (String string) {
         String[] expArr = string.split(" ");

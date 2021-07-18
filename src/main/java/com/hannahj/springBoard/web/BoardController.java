@@ -59,7 +59,14 @@ public class BoardController {
 
     @GetMapping("/write")
     @Transactional
-    public String write(@RequestParam(value = "board", defaultValue = "1") Long id, Model model) {
+    public String write(
+            @RequestParam(value = "board", defaultValue = "1") Long id, 
+            HttpSession httpSession, 
+            Model model) {
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        if(user != null) {
+            model.addAttribute("user", user);
+        }
         List<Board> boards = boardRepo.findAll();
         model.addAttribute("boards", boards);
         model.addAttribute("id", id);

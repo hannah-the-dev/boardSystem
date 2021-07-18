@@ -34,6 +34,10 @@
           <td> <input type="text" name="username" class='editable' th:value='${post.username}' readonly></td>
         </tr>
         <tr>
+          <th>조회수</th>
+          <td> <input type="text" name="username" th:value='${post.hit}' readonly></td>
+        </tr>
+        <tr>
           <th>작성일</th>
           <td style="text-align: left"
           th:text='${#temporals.format(post.createdDate,"yyyy-MM-dd HH:mm")}'>

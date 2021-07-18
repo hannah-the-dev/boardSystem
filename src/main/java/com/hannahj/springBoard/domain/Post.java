@@ -45,7 +45,7 @@ public class Post extends BaseTimeEntity {
 	
 //	private List<Post> comment;
 	
-	@Formula("(select count(1) from board_item as bc where bc.parent_id = id)")
+	@Formula("(select count(1) from post as bc where bc.parent_id = id)")
 	private Long commentSize;
 
 }
