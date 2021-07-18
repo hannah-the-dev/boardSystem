@@ -30,8 +30,9 @@ public class Post extends BaseTimeEntity {
 	@Column
 	private Long id;
 	
-	@Column
-	private String username;
+	@ManyToOne(optional=false)
+	@JoinColumn(name="user")
+	private User user;
 	
 	@Column
 	private String title;
