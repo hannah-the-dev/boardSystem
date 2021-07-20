@@ -2,16 +2,20 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/top::head">
 </head>
+<head>
+<link th:href="@{/top.css}" rel="stylesheet" type="text/css">
+<link th:href="@{/index.css}" rel="stylesheet" type="text/css">
+</head>
 <body>
   <nav class="top" th:insert="/top::topnav"></nav>
   <div class="main">
     <div class="title">
       <h1>게시판 모음</h1>
     </div>
-    <div th:each="category: ${list}">
-      <dl th:object="${category}">
+    <div id="categories">
+      <dl th:object="${category}" th:each="category: ${list}">
         <dt th:onClick="'location.href=\''+@{/category(id=${category.id})}+'\''" th:text="*{title}"></dt>
-        <dd th:each="board: *{boards}" th:onClick="'location.href=\''+@{/board(id=*{id})}+'\''"
+        <dd th:each="board: *{boards}" th:onClick="'location.href=\''+@{/board(id=${board.id})}+'\''"
           th:text="${board.title}">
         </dd>
       </dl>

@@ -32,8 +32,10 @@
       <tr>
         <th>작성자</th>
         <td th:object="${user}"> 
-        <input type="text" name="username" class='editable' required
-        th:value="${user==null ? '' : user.email}" th:text="*{name}"></td>
+        <input th:if="${user != null}" type="hidden" name="user"
+        th:value="${user.id}"> <span th:text="*{name}"></span>
+        <input th:unless="${user != null}" name="user.name" class='editable'>
+        </td>
       </tr>
       <tr>
         <th>작성일</th>

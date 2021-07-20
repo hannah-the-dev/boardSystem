@@ -3,10 +3,15 @@ package com.hannahj.springBoard.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.Singular;
+
+import java.util.List;
 
 import javax.persistence.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Builder
@@ -24,6 +29,10 @@ public class User extends BaseTimeEntity {
 
    @Column
    private String picture;
+   
+   @Singular
+   @OneToMany(mappedBy="user", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+   private List<Post> posts;
 
    @Enumerated(EnumType.STRING)
    @Column(nullable = false)

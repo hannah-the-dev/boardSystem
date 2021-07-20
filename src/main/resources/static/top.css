@@ -2,6 +2,11 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap');
 
+
+body {
+  margin: 0;
+}
+
 #header {
   margin: 0;
 }
@@ -15,7 +20,7 @@
   margin-right: auto;
 }
 
-#logo {
+img {
   height: 30px;
   vertical-align: middle;
 }
@@ -43,6 +48,11 @@
     
 }
 
+a {
+  color: #63FFBF;
+  text-decoration: none;
+}
+
 #searchbox input[type='text'] {
   border-radius: .7em;
   margin: .5rem 0 .5rem .5rem;
@@ -58,3 +68,10 @@
   background-color: #233D4D;
 }
 
+#profile-pic {
+  border-radius: 70%;
+}
+
+#member > div {
+  margin-right: .5rem;
+}

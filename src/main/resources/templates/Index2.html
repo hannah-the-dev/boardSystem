@@ -1,38 +1,49 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <link th:href="@{/join.css}" rel="stylesheet" type="text/css">
+<!-- <head th:replace="/top::head"> -->
+</head>
   <meta name="google-signin-scope" content="profile email">
   <meta name="google-signin-client_id"
   content="356218036405-gqt7pd6e5epbo4sr8f387vqf7dpl2v3t.apps.googleusercontent.com"
 >
 
+<head>
+<link th:href="@{/index.css}" rel="stylesheet" type="text/css">
+<style>
+
+div, span {
+  margin: 0 auto;
+  text-align:center;
+}
+
+#logo {
+  width: 30%;
+  height: 30%;
+  margin: 0 auto;
+}
+
+a {
+color: black
+}
+
+</style>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
+
 </head>
 <body>
-  <nav class="top" th:insert="/top::topnav"></nav>
-  <div class="main">
-    <div class="title">
-      <h1>회원가입</h1>
+  <div>
+    <img id="logo" alt="" src="/images/logo.png">
+  </div>
+  <div id="google-join">
+    <div id="text">
+      <h3>Herstories는 회원제로 운영됩니다. 비회원은 읽기만 가능합니다.<br/>
+      구글로 로그인/가입할 수 있습니다.</h3>
     </div>
-    <div id="google-join">
-      <div id="text"><span>구글로 시작하기</span></div>
-      <div class="g-signin2" data-onsuccess="onSignIn" data-theme="light"></div>
-    </div>
-    <div id="google-in">
+    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="light"></div>
+    <a th:href="@{/main}">[입장하기]</a>
       <div class="g-signout" data-theme="light" onclick="signOut();">Sign Out</div>
     </div>
-    <div>
-      <form>
-        <table>
-          <tr>
-            <th>email</th>
-            <td></td>
-          </tr>
-        </table>
-      </form>
-    </div>
-  </div>
+
   <script>
       function onSignIn(googleUser) {
         // Useful data for your client-side scripts:
@@ -55,8 +66,11 @@
         });
 //         activate when user can't logout
         auth2.disconnect();
+        sessionStorage.clear();
+        location.reload();
       }
     </script>
+
 
 </body>
 </html>

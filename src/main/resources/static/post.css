@@ -135,6 +135,10 @@ button:hover {
     background-color: var(--button-hover-bg-color);
   }
 
+button[disabled] {
+  background-color: #cdcdcd;
+}
+
 textarea {
   height: 10em;
 }

@@ -1,38 +1,21 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-  <head th:fragment="head">
-  <meta charset="UTF-8">
-  <link th:href="@{/top.css}" rel="stylesheet" type="text/css">
-  <link th:href="@{/post.css}" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-  <title th:text="|Herstories::${title}|"></title>
+<head th:fragment="head">
+<meta charset="UTF-8">
+<link th:href="@{/top.css}" rel="stylesheet" type="text/css">
+<link th:href="@{/post.css}" rel="stylesheet" type="text/css">
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id"
+  content="356218036405-gqt7pd6e5epbo4sr8f387vqf7dpl2v3t.apps.googleusercontent.com"
+>
+<meta http-equiv="Cache-Control" content="no-cache">
+<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+
+
+<title th:text="|Herstories::${title}|"></title>
 </head>
-<body>
-  <div th:fragment="topnav" id="header" style="display: flex">
-    <div><i class="fas fa-bars"></i>
-    </div>
-    <div id="logo-container" th:onClick="location.href='/'"
-      ><img src="/images/logo-straight.png" id="logo"></div>
-    <div class="search">
-      <form action="search">
-        <div id="searchbox">
-          <input type="text" name="keywords" placeholder="여기에서 검색하세요" style="width: 80%" required>
-        </div>
-        <div id="searchbutton">
-          <input type="submit" class="headerbutton" formaction="search" value="검색">
-        </div>
-      </form>
-    </div>
-    <div th:if='${user == null}' id='non-memeber'>
-      <div onClick="location.href='/oauth2/authorization/google'">로그인</div>
-      <div th:onClick="'location.href=\''+@{/join}+'\''">회원가입</div>
-    </div>
-    <div th:unless='${user == null}' id='memeber'>
-      <div th:onClick="'location.href=\''+@{/userinfo}+'\''" th:text="${user.name}"></div>
-      <div th:onClick="signOut();">로그아웃</div>
-    </div>
-  </div>
-    <script>
+<body th:fragment="topnav">
+  <script>
       function onSignIn(googleUser) {
         // Useful data for your client-side scripts:
         var profile = googleUser.getBasicProfile();
@@ -47,14 +30,56 @@
         var id_token = googleUser.getAuthResponse().id_token;
         console.log("ID Token: " + id_token);
       };
+
+//       function onLoad() {
+//         gapi.load('auth2', function() {
+//           gapi.auth2.init();
+//         });
+//       }
+
       function signOut() {
+        gapi.load('auth2', function() {
+          gapi.auth2.init();
+        });
+
+        
         var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
+        auth2.signOut().then(function() {
           console.log('User signed out.');
         });
-//         activate when user can't logout
+        //        activate when user can't logout
         auth2.disconnect();
+        sessionStorage.clear();
+        location.href="/signout";
       }
     </script>
+  <div id="header" style="display: flex">
+    <div>
+      <i class="fas fa-bars"></i>
+    </div>
+    <div id="logo-container" th:onClick="location.href='/'">
+      <img src="/images/logo-straight.png" id="logo">
+    </div>
+    <div class="search">
+      <form action="search">
+        <div id="searchbox">
+          <input type="text" name="keywords" placeholder="여기에서 검색하세요" style="width: 80%" required>
+        </div>
+        <div id="searchbutton">
+          <input type="submit" class="headerbutton" th:formaction="@{/search}" value="검색">
+        </div>
+      </form>
+    </div>
+    <div th:if='${user == null}' id='non-memeber'>
+      <div onClick="location.href='/oauth2/authorization/google'">로그인</div>
+      <div th:onClick="'location.href=\''+@{/join}+'\''">회원가입</div>
+    </div>
+    <div th:unless='${user == null}' id='member'>
+      <div th:onClick="'location.href=\''+@{/userinfo}+'\''">
+        <img th:src="${user.picture}" id="profile-pic"> <span th:text="${user.name}"></span>
+      </div>
+      <div onClick="signOut();">Sign out</div>
+    </div>
+  </div>
 </body>
 </html>

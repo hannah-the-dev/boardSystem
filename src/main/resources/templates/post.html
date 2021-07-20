@@ -9,13 +9,12 @@
       <button th:if="${post.board eq null}" onclick="history.back(-1);" class="button">뒤로 가기</button> 
     <div th:unless="${post.board eq null}"><div class="title"><h1 th:text="|${post.id}번 게시글|"></h1></div>
     <form>
-      <table>
+      <table th:object="${post}">
         <tr>
           <th style="width:10%">게시판</th>
           <td> <select name="board" >
             <option value="" disabled='disabled'>게시판을 선택하세요</option>
-            <option value="" selected>게시판을 선택하세요</option>
-            <option th:each='board: ${boards}' value='${board.id}'
+            <option th:each='board: ${boards}' th:value='${board.id}'
               th:selected="${board.id eq id}" class="selectable"
               th:text='${board.title}'>
             </option>
@@ -23,27 +22,28 @@
         </tr>
         <tr>  
           <th>글 번호</th>
-          <td> <input type="text" name="id" th:value='${post.id}' readonly> </td>
+          <td> <input type="text" name="id" th:value='*{id}' readonly> </td>
         </tr>
         <tr>
           <th>글 제목</th>
-          <td> <input type="text" name="title" class='editable' th:value='${post.title}' readonly></td>
+          <td> <input type="text" name="title" class='editable' th:value='*{title}' readonly></td>
         </tr>
         <tr>
           <th>작성자</th>
-          <td> <input type="text" name="username" class='editable' th:value='${post.username}' readonly></td>
+          <td> <input type="hidden" name="user" class='editable' th:value="${post.user.id}" readonly>
+          <span th:text='${post.user.name}'></span></td>
         </tr>
         <tr>
           <th>조회수</th>
-          <td> <input type="text" name="username" th:value='${post.hit}' readonly></td>
+          <td> <input type="text" th:value='*{hit}' readonly></td>
         </tr>
         <tr>
           <th>작성일</th>
-          <td style="text-align: left"
-          th:text='${#temporals.format(post.createdDate,"yyyy-MM-dd HH:mm")}'>
-          <span th:if="${post.modifiedDate ne post.createdDate}" 
-          th:text="|(수정: ${#temporals.format(post.modifiedDate,'yyyy-MM-dd HH:mm')})|">
-          </span>
+          <td>
+            <span th:text='*{#temporals.format(createdDate,"yyyy-MM-dd HH:mm")}'></span>
+            <span th:if="*{modifiedDate > createdDate}" 
+            th:text="|(수정: *{#temporals.format(modifiedDate,'yyyy-MM-dd HH:mm')})|">
+            </span>
           </td>
         </tr>
         <tr style="vertical-align: top">
@@ -51,8 +51,8 @@
           <td height="auto"> <textarea name="content" class='editable' readonly th:text="${post.content}"></textarea></td>
         </tr>
       </table>
-      <input type="button" class="button" th:onClick="'location.href=\''+@{/board(id=${post.board.id})+'\''" value="목록">
-      <input type="button" class="button" onClick='editable(this);' value="수정">
+      <input type="button" class="button" th:onClick="'location.href=\''+@{/board(id=${post.board.id})}+'\''" value="목록">
+      <input type="button" class="button" onClick='editable(this);' value="수정" th:disabled="${user==null or user.id != post.user.id}">
       <button type="submit" class="button" id="save" formmethod="post" th:formaction="@{/post/edit}" style="display:none">저장</button>
       <button type="submit" class="button" id="delete" formmethod="post" th:formaction="@{/post/delete}" style="display:none">삭제</button>
     </form>
@@ -64,9 +64,9 @@
         <dd th:if="*{#strings.isEmpty(content)}">등록된 댓글이 없어요! 이 글에 첫번째 댓글을 달아보세요.</dd> 
         <dd th:each="comment: *{content}">
           <div style="margin: 1em;">
-            <div style="display: inline-block" th:text="${comment.username}"></div>
+            <div style="display: inline-block" th:text="${comment.user.name}"></div>
             <div th:unless="${comment.modifiedDate ne comment.createdDate}" 
-            style="display: inline-block" th:text="|(${comment.createdDate})|"></div>
+            style="display: inline-block" th:text="|(${#temporals.format(comment.createdDate,'yyyy-MM-dd HH:mm')})|"></div>
             <div th:if="${comment.modifiedDate ne comment.createdDate}" 
             style="display: inline-block" th:text="|(${comment.createdDate}, 수정: ${comment.modifiedDate})|"></div>
             <div th:text="${comment.content}"></div>
@@ -78,11 +78,14 @@
       <dl>
         <dt>새 댓글 등록</dt>
         <dd>
-            <div> <input type="text" name="username" required placeholder="이름">
+            <div> 
+            <input th:if='${user != null}' type="hidden" name="user" required th:value="${user.id}">
+            <span th:if='${user != null}' th:text="${user.name}"> </span>
+            <input th:unless='${user != null}' placeholder="회원만 댓글을 작성할 수 있습니다. 지금 가입하세요!" readonly>
             <input type="hidden" name="board" th:value="${post.board.id}">
             <input type="hidden" name="parentId" th:value="${post.id}">
             </div>
-            <div>현재시간</div>
+            <div><span th:text="${#dates.format(#dates.createNow(),'yyyy-MM-dd HH:mm')}"></span></div>
             <div> 
             <textarea name='content' cols=auto rows=auto wrap="hard" required placeholder="댓글 내용을 입력해 주세요"></textarea> 
             </div>

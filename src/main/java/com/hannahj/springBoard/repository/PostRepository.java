@@ -2,16 +2,11 @@ package com.hannahj.springBoard.repository;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import com.hannahj.springBoard.domain.Board;
 import com.hannahj.springBoard.domain.Post;
@@ -45,5 +40,8 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
 	List<Post> findByParentIdIsNullAndTitleLikeIgnoreCaseOrParentIdIsNullAndContentLikeIgnoreCase(String expression, String expression1);
 	
     Page<Post> findByParentId(Specification<Post> search, Pageable pageable);
+
+    Page<Post> findByParentIdIsNullAndTitleLikeIgnoreCaseOrParentIdIsNullAndContentLikeIgnoreCase(String string,
+            String string2, Pageable pageable);
     
 }

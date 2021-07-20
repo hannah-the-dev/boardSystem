@@ -21,12 +21,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hannahj.springBoard.config.auth.LoginUser;
+import com.hannahj.springBoard.config.auth.dto.SessionUser;
 import com.hannahj.springBoard.domain.Board;
 import com.hannahj.springBoard.domain.Post;
+import com.hannahj.springBoard.domain.User;
 import com.hannahj.springBoard.repository.BoardRepository;
 import com.hannahj.springBoard.repository.PostRepository;
+import com.hannahj.springBoard.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping(value="/post")
 public class PostController {
 	
@@ -34,6 +41,8 @@ public class PostController {
 	private PostRepository postRepo;
 	@Autowired
 	private BoardRepository boardRepo;
+	@Autowired
+	private UserRepository userRepo;
 	
 	@RequestMapping(value="/list")
 	@ResponseBody
@@ -48,9 +57,18 @@ public class PostController {
             @PageableDefault(sort = { "id" }, direction = Direction.DESC) Pageable pageable, 
             @CookieValue(name="view") String cookie,
             HttpServletResponse response,
+            @LoginUser SessionUser user,
             Model model) {
         if (!postRepo.existsById(id)) {
             return null;
+        }
+        
+        if(user != null) {
+            Optional<User> loginUser = userRepo.findByEmail(user.getEmail());
+            if (loginUser.isPresent()) {
+                User writer = loginUser.get();
+                model.addAttribute("user", writer);
+            }
         }
         
         Post post = Post.builder().build();
@@ -84,7 +102,7 @@ public class PostController {
        postOpt.ifPresentOrElse(selected ->{
            selected.setBoard(post.getBoard());
            selected.setTitle(post.getTitle());
-           selected.setUsername(post.getUsername());
+           selected.setUser(post.getUser());
            selected.setParentId(post.getParentId());
            selected.setContent(post.getContent());
            
@@ -107,6 +125,7 @@ public class PostController {
    @PostMapping("/delete")
    public String delete(
            @ModelAttribute Post post) {
+       
        Optional<Post> postOpt = postRepo.findById(post.getId());
        StringBuffer buff = new StringBuffer();
        
@@ -114,7 +133,7 @@ public class PostController {
            selected.setId(post.getId());
            selected.setBoard(post.getBoard());
            selected.setTitle(post.getTitle());
-           selected.setUsername(post.getUsername());
+           selected.setUser(post.getUser());
            selected.setParentId(post.getParentId());
            selected.setContent(post.getContent());
            
@@ -132,14 +151,16 @@ public class PostController {
                        "redirect:/post/"+post.getParentId();
            buff.append(add);
        }
-               );
+       );
        return buff.toString();
    }
    
    
    @PostMapping("/writer")
    public String writer(
-           @ModelAttribute Post post) {
+           @ModelAttribute Post post
+           ) {
+       
        Post saved = postRepo.save(post);
        
        if(saved.getParentId() == null) {

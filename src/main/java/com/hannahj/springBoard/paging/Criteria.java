@@ -35,8 +35,9 @@ public class Criteria {
         this.startBlockPage = ((pageNumber)/pageBlock)*pageBlock+1; 
         this.endBlockPage = (int) ((totalPages < startBlockPage+pageBlock-1)?
                 totalPages : startBlockPage+pageBlock-1); 
+//        because page starts from 1, adjust endblock if it has only page.
+        this.endBlockPage = (this.endBlockPage == 0 ? 1: this.endBlockPage);
     }
-
     
 
 }

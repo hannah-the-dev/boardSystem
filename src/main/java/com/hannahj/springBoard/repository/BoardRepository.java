@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import com.hannahj.springBoard.domain.Board;
+import com.hannahj.springBoard.domain.Category;
 
 // CRUD
 @Repository
@@ -18,4 +19,6 @@ public interface BoardRepository extends JpaRepository<Board, Long>, JpaSpecific
 	Page<Board> findAllByTitle(String title, Pageable pageable);
 	
 	List<Board> findAllByTitle(String title);
+
+    Page<Board> findAllByCategory(Category category, Pageable pageable);
 }

@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.hannahj.springBoard.config.auth.LoginUser;
 import com.hannahj.springBoard.config.auth.dto.SessionUser;
 import com.hannahj.springBoard.domain.Board;
+import com.hannahj.springBoard.domain.Category;
 import com.hannahj.springBoard.domain.Post;
 import com.hannahj.springBoard.domain.User;
 import com.hannahj.springBoard.paging.Criteria;
 import com.hannahj.springBoard.repository.BoardRepository;
+import com.hannahj.springBoard.repository.CategoryRepository;
 import com.hannahj.springBoard.repository.PostRepository;
 import com.hannahj.springBoard.repository.UserRepository;
 
@@ -28,8 +30,10 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Controller
-public class BoardController {
+public class CategoryController {
 
+    @Autowired
+    private CategoryRepository categoryRepo;
     @Autowired
     private BoardRepository boardRepo;
     @Autowired
@@ -38,52 +42,30 @@ public class BoardController {
     private UserRepository userRepo;
     //Since http session has only constructor, @RequiredArgsConstructor construct automatically
     
-    @GetMapping({ "/board" })
+    @GetMapping({ "/category" })
     public String postList(@RequestParam(value = "id", defaultValue = "1") Long id,
             @PageableDefault(sort = { "id" }, direction = Direction.DESC) Pageable pageable, 
             @LoginUser SessionUser user,
             Model model) {
-        //if the user is login-ed, find that user info and forward to userInfo page
+//        if the user is login-ed, find that user info and forward to userInfo page
         if(user != null) {
             model.addAttribute("user", user);
         }
-        Optional<Board> boardOptional = boardRepo.findById(id);
-        Board board = Board.builder().build();
-        if (!boardOptional.isPresent()) {
+        Optional<Category> categoryOptional = categoryRepo.findById(id);
+        Category category = Category.builder().build();
+        if (!categoryOptional.isPresent()) {
             return null;
         } else {
-            board = boardOptional.get();
+            category = categoryOptional.get();
         }
-        Page<Post> postPage = postRepo.findAllByBoardAndParentIdIsNull(board, pageable);
-        Criteria criteria = new Criteria(postPage);
+        Page<Board> boardPage = boardRepo.findAllByCategory(category, pageable);
+        Criteria criteria = new Criteria(boardPage);
         model.addAttribute("startBlockPage", criteria.getStartBlockPage());
         model.addAttribute("endBlockPage", criteria.getEndBlockPage());
-        model.addAttribute("page", postPage);
-        model.addAttribute("board", board);
-        model.addAttribute("title", board.getTitle());
-        return "/board";
+        model.addAttribute("page", boardPage);
+        model.addAttribute("category", category);
+        model.addAttribute("title", category.getTitle());
+        return "/category";
     }
 
-    @GetMapping("/write")
-    @Transactional
-    public String write(
-            @RequestParam(value = "board", defaultValue = "1") Long id, 
-            @LoginUser SessionUser user, 
-            Model model) {
-        if(user != null) {
-            Optional<User> loginUser = userRepo.findByEmail(user.getEmail());
-            if (loginUser.isPresent()) {
-                User writer = loginUser.get();
-                model.addAttribute("user", writer);
-            }
-        } else {
-            return "redirect:/board";
-            
-        }
-        List<Board> boards = boardRepo.findAll();
-        model.addAttribute("boards", boards);
-        model.addAttribute("id", id);
-        model.addAttribute("title", "글쓰기");
-        return "/write";
-    }
 }

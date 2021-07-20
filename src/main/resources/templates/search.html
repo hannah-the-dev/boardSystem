@@ -20,7 +20,7 @@
         <td th:text='${post.board.title}'></td>
         <td th:text='${page.totalElements - ( page.number ) * page.size - postStat.index}'></td>
         <td th:text='|${post.title}(${post.commentSize})|'></td>
-        <td th:text='${post.username}'></td>
+        <td th:text='${post.user.name}'></td>
         <td th:text='${#temporals.format(post.createdDate, "yyyy-MM-dd")}'></td>
       </tr>
     </table>
@@ -29,15 +29,15 @@
   <div class="text-xs-center">
     <ul class="pagination justify-content-center">
 <!--       이전 -->
-      <li th:unless="${page.first}" class="page-item"><a class="page-link" th:href="@{''(keywords=${keyword}, page=1)}">처음</a></li>
-      <li th:unless="${page.first}" class="page-item"><a class="page-link" th:href="@{''(keywords=${keyword}, page=${page.number-1)}">&larr;</a></li>
+      <li th:unless="${page.first}" class="page-item"><a class="page-link" th:href="@{''(keywords=${keywords}, page=1)}">처음</a></li>
+      <li th:unless="${page.first}" class="page-item"><a class="page-link" th:href="@{''(keywords=${keywords}, page=${page.number-1})}">&larr;</a></li>
 <!--       페이지 그룹 -->
       <li class='page-item' th:each="this: ${#numbers.sequence(startBlockPage, endBlockPage)}"
-      th:classappend="${this == page.number} ? 'disabled'">
-      <a class="page-link" th:href="@{''(keywords=${keyword}, page=${page.number})}" th:text='${page.number+1}'></a></li>
+      th:classappend="${this == page.number +1} ? 'disabled'">
+      <a class="page-link" th:href="@{''(keywords=${keywords}, page=${this})}" th:text='${this}'></a></li>
 <!--       다음 -->
-      <li th:unless="${page.last}" class="page-item"><a class="page-link" th:href="@{''(keywords=${keyword}, page=${page.number+2)}">&rarr;</a></li>
-      <li th:unless="${page.last}" class="page-item"><a class="page-link" th:href="@{''(keywords=${keyword}, page=${page.totalPages})}">끝</a></li>
+      <li th:unless="${page.last}" class="page-item"><a class="page-link" th:href="@{''(keywords=${keywords}, page=${page.number+2})}">&rarr;</a></li>
+      <li th:unless="${page.last}" class="page-item"><a class="page-link" th:href="@{''(keywords=${keywords}, page=${page.totalPages})}">끝</a></li>
     </ul>
   </div>
   <!-- 페이징 영역 끝 -->      
